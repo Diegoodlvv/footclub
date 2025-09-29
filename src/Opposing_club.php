@@ -1,6 +1,10 @@
 <?php
 
-class OpposingClub
+namespace src;
+
+use interfaces\City;
+
+class OpposingClub implements City
 {
 
     public string $adress;

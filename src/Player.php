@@ -1,13 +1,19 @@
 <?php
 
-class Player
+namespace src;
+
+use interfaces\FirstName;
+use interfaces\LastName;
+use interfaces\Model;
+
+class Player implements FirstName, LastName, Model
 {
     private string $firstname;
     private string $lastname;
-    private DateTime $birthdate;
+    private \DateTime $birthdate;
     private string $picture;
 
-    public function __construct(string $firstname, string $lastname, DateTime $birthdate, string $picture)
+    public function __construct(string $firstname, string $lastname, \DateTime $birthdate, string $picture)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -25,7 +31,7 @@ class Player
         return $this->lastname;
     }
 
-    public function getBirthdate(): DateTime
+    public function getBirthdate(): \DateTime
     {
         return $this->birthdate;
     }
@@ -45,7 +51,7 @@ class Player
         $this->lastname = $name;
     }
 
-    public function setBirthdate(DateTime $date): void
+    public function setBirthdate(\DateTime $date): void
     {
         $this->birthdate = $date;
     }

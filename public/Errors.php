@@ -1,5 +1,7 @@
 <?php
 
+namespace public;
+
 class Errors
 {
     public string $errorString;

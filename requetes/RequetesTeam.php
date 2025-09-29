@@ -1,6 +1,8 @@
 <?php
 
-require_once 'LoginDatabase.php';
+namespace requetes;
+
+use src\Team;
 
 class RequetesTeam extends LoginDatabase
 {
@@ -24,7 +26,7 @@ class RequetesTeam extends LoginDatabase
         $requete->bindValue(':name', $team->GetTeamName());
         $requete->execute();
 
-        if ($requete->fetch(PDO::FETCH_ASSOC) === false) {
+        if ($requete->fetch(\PDO::FETCH_ASSOC) === false) {
             $this->addTeam($team);
         } else {
             echo "Cette équipe a déjà été renseignée </br>";

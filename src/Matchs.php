@@ -1,22 +1,22 @@
 <?php
 
-include 'includes/database.php';
-include 'Errors.php';
-include 'Team.php';
-include 'Opposing_club.php';
+namespace src;
 
+use interfaces\City;
+use interfaces\Team;
+use interfaces\Model;
 
-class Matchs
+class Matchs implements City, Model
 {
 
     private int $team_score;
     private int $opponent_score;
-    private DateTime $date;
+    private \DateTime $date;
     private Team $team;
     private string $city;
     private OpposingClub $opposing_club;
 
-    public function __construct(int $team_score, int $opponent_score, DateTime $date, Team $team, string $city, OpposingClub $opposing_club)
+    public function __construct(int $team_score, int $opponent_score, \DateTime $date, Team $team, string $city, OpposingClub $opposing_club)
     {
         $this->team_score = $team_score;
         $this->opponent_score = $opponent_score;
@@ -36,7 +36,7 @@ class Matchs
         return $this->opponent_score;
     }
 
-    public function getDate(): DateTime
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
@@ -46,7 +46,7 @@ class Matchs
         return $this->team;
     }
 
-    public function getCity()
+    public function getCity(): string
     {
         return $this->city;
     }
@@ -66,7 +66,7 @@ class Matchs
         $this->opponent_score = $opponent_score;
     }
 
-    public function setDate(DateTime $date): void
+    public function setDate(\DateTime $date): void
     {
         $this->date = $date;
     }

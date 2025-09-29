@@ -1,5 +1,7 @@
 <?php
 
+namespace requetes;
+
 abstract class LoginDatabase
 {
 

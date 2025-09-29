@@ -1,8 +1,10 @@
 <?php
 
+namespace src;
 
+use interfaces\Team;
 
-class PlayerHasTeam
+class PlayerHasTeam implements Team
 {
     public array $roles = [
         "Attaquant",
@@ -21,6 +23,16 @@ class PlayerHasTeam
         $this->team = $team;
         $this->player = $player;
         $this->role = $role;
+    }
+
+    public function getTeam(): Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(Team $newTeam): void
+    {
+        $this->team = $newTeam;
     }
 
     public function verifRole(): void

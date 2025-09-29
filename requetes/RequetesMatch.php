@@ -1,8 +1,17 @@
 <?php
 
-require_once 'LoginDatabase.php';
+namespace requetes;
 
-class RequetesMatch extends LoginDatabase
+use src\Team;
+use src\OpposingClub;
+use src\Matchs;
+
+use interfaces\Add;
+use interfaces\Delete;
+use interfaces\Modify;
+use interfaces\Model;
+
+class RequetesMatch extends LoginDatabase implements Add, Delete, Modify
 {
     const TABLE = "match";
     private int $teamID;
@@ -19,7 +28,7 @@ class RequetesMatch extends LoginDatabase
         $requete = $this->getPdo()->prepare("SELECT id FROM team WHERE name = :name");
         $requete->bindParam(":name",  $team->GetTeamName());
         $requete->execute();
-        $this->teamID = $requete->fetch(pdo::FETCH_ASSOC);
+        $this->teamID = $requete->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function selectOpposingClubId(OpposingClub $opponent): void
@@ -27,7 +36,7 @@ class RequetesMatch extends LoginDatabase
         $requete = $this->getPdo()->prepare("SELECT id FROM opposing_club WHERE address = :address");
         $requete->bindParam(":address", $opponent->getAdress());
         $requete->execute();
-        $this->opposing_club_id = $requete->fetch(pdo::FETCH_ASSOC);
+        $this->opposing_club_id = $requete->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function bindValueMatch($requete, Matchs $match): void
@@ -40,10 +49,16 @@ class RequetesMatch extends LoginDatabase
         $requete->bindValue(':opposing_club_id', $this->opposing_club_id);
     }
 
-    public function addMatch(Matchs $match)
+    public function add(Model $match): void
     {
         $requete = $this->getPdo()->prepare("INSERT INTO" . self::TABLE . "(team_score, opponent_score, date, team_id, city, opposing_club_id) values (:team_score, :opponent_score, :date, :team_id, :city, :opposing_club_id)");
         $this->bindValueMatch($requete, $match);
         $requete->execute();
+    }
+
+    public function delete(Model $match): void
+    {
+        
+        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE (team_score = )")
     }
 }

@@ -1,16 +1,22 @@
 <?php
 
-require_once 'LoginDatabase.php';
+namespace requetes;
 
-class RequetesPlayer extends LoginDatabase
+use src\Player;
+use interfaces\Add;
+use interfaces\Model;
+use interfaces\Delete;
+use interfaces\Modify;
+
+class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify
 {
     const TABLE = "player";
 
-    protected function bindValuePlayer($requete, Player $player): void
+    protected function bindValuePlayer($requete, Model|Player $player): void
     {
         $requete->bindValue(':firstname', $player->getFirstName());
         $requete->bindValue(':lastname', $player->getLastName());
-        $requete->bindValue(':birthdate', $player->getBirthdate()->format('Y-m-d'));
+        $requete->bindValue(':birthdate', $player->getBirthdate());
         $requete->bindValue(':picture', $player->getPicture());
     }
 
@@ -19,7 +25,7 @@ class RequetesPlayer extends LoginDatabase
         header("Location: ../player.php");
     }
 
-    public function addPlayer(Player $player): void
+    public function add(Model|Player $player): void
     {
         $requete = $this->getPdo()->prepare("INSERT INTO " . self::TABLE . " (firstname, lastname, birthdate, picture) values(:firstname, :lastname, :birthdate, :picture)");
         $this->bindValuePlayer($requete, $player);
@@ -31,16 +37,16 @@ class RequetesPlayer extends LoginDatabase
         $requete = $this->getPdo()->prepare("SELECT id FROM " . self::TABLE . " WHERE firstname = :firstname AND lastname = :lastname  AND birthdate = :birthdate AND picture = :picture");
         $this->bindValuePlayer($requete, $player);
         $requete->execute();
-        $isPlayer = $requete->fetch(pdo::FETCH_ASSOC);
+        $isPlayer = $requete->fetch(\PDO::FETCH_ASSOC);
 
         if ($isPlayer == false) {
-            $this->addPlayer($player);
+            $this->add($player);
         } else {
             echo "Ce joueur a déjà été renseigné </br>";
         }
     }
 
-    public function deletePlayer(Player $player): void
+    public function delete(Model $player): void
     {
         $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE firstname = :firstname AND lastname = :lastname  AND birthdate = :birthdate AND picture = :picture");
         $this->bindValuePlayer($requete, $player);
@@ -48,9 +54,8 @@ class RequetesPlayer extends LoginDatabase
         $this->redirection();
     }
 
-    public function modifyPlayer(Player $player, array $newPlayerData): void
+    public function modify(Model|Player $player, array $newPlayerData): void
     {
-
         $playerFirstName = $player->getFirstName();
         $playerLastName = $player->getLastName();
         $playerBirthdate = $player->getBirthdate();
