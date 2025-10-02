@@ -1,0 +1,231 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+    font-family: Helvetica;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+.container {
+    margin: 100px 0 0 100px;
+}
+
+.navBarre {
+    width: 100%;
+    background: linear-gradient(90deg, #232526 0%, #414345 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0;
+}
+
+.navBarre {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 220px;
+    background: #222;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+    z-index: 100;
+}
+
+.navList {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.navItem {
+    margin: 0 1.5rem;
+    position: relative;
+    margin: 0;
+    width: 160px;
+}
+
+.navItem a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 1rem 0.5rem;
+    transition: color 0.2s, background 0.2s;
+    border-radius: 8px;
+    padding: 18px 24px;
+    transition: background 0.2s;
+    border-radius: 0 24px 24px 0;
+}
+
+.navItem a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #00e6e6;
+    background: #444;
+}
+
+.navIcon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+    margin-right: 16px;
+    transition: color 0.2s;
+}
+
+.navText {
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Add margin to your main content so it's not hidden behind the sidebar */
+body {
+    margin-left: 220px;
+}
+
+
+form {
+    gap: 16px;
+    align-items: start
+}
+
+
+
+label {
+    display: block;
+    font-size: 13px;
+    color: #9aa4b2;
+    margin-bottom: 8px;
+}
+
+
+.input-wrap {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin: 10px 0 30px 0px;
+    width: 80%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+input[type="text"],
+input[type="date"] {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 15px;
+    padding: 6px 0;
+}
+
+
+input[type="file"] {
+    display: none
+}
+
+
+.file-drop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    background: #1a1a1a;
+}
+
+
+.muted {
+    color: #9aa4b2;
+    font-size: 13px
+}
+
+
+.preview {
+    width: 96px;
+    height: 96px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: block;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    background: #222;
+    color: #6ee7b7;
+}
+
+
+.actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 6px
+}
+
+
+footer {
+    grid-column: 1 / -1;
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+
+@media (max-width:720px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px
+    }
+}
+
+
+.hint {
+    font-size: 12px;
+    color: #9aa4b2
+}

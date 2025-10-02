@@ -1,8 +1,7 @@
 <?php
 
-namespace requetes;
+namespace App;
 
-use src\Player;
 use interfaces\Add;
 use interfaces\Model;
 use interfaces\Delete;
@@ -46,10 +45,10 @@ class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify
         }
     }
 
-    public function delete(Model $player): void
+    public function delete(Model $player, $id): void
     {
-        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE firstname = :firstname AND lastname = :lastname  AND birthdate = :birthdate AND picture = :picture");
-        $this->bindValuePlayer($requete, $player);
+        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE id = :id");
+        $requete->bindValue(':id', $id);
         $requete->execute();
         $this->redirection();
     }

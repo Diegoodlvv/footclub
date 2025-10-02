@@ -1,10 +1,7 @@
 <?php
 
-namespace requetes;
+namespace App;
 
-use src\Team;
-use src\OpposingClub;
-use src\Matchs;
 
 use interfaces\Add;
 use interfaces\Delete;
@@ -56,9 +53,5 @@ class RequetesMatch extends LoginDatabase implements Add, Delete, Modify
         $requete->execute();
     }
 
-    public function delete(Model $match): void
-    {
-        
-        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE (team_score = )")
-    }
+    public function delete(Model $match, $id): void {}
 }

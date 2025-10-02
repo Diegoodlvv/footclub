@@ -1,6 +1,6 @@
 <?php
 
-namespace src;
+namespace App;
 
 use interfaces\FirstName;
 use interfaces\LastName;

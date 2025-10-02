@@ -1,8 +1,7 @@
 <?php
 
-namespace requetes;
+namespace App;
 
-use src\Team;
 
 class RequetesTeam extends LoginDatabase
 {

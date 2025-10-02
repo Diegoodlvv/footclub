@@ -2,6 +2,11 @@
 
 namespace public;
 
-require_once 'head.php';
+require_once 'NavBarre.php';
 
-Autoloader::register();
+
+
+?>
+<div class="container">
+    <h1>Bienvenue sur footclub</h1>
+</div>
