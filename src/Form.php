@@ -6,15 +6,19 @@ use DateTime;
 
 class Form
 {
-    protected array $data = [];
-    protected Error $erreur;
+    protected array $data;
+    protected Error $errors;
 
-    public function __construct(array $data, Error $erreur)
+    public function __construct(array $data, Error $errors)
     {
         $this->data = $data;
-        $this->erreur = $erreur;
+        $this->errors = $errors;
     }
 
+    public function getData()
+    {
+        return $this->data;
+    }
 
     public function trimData(): array
     {
@@ -26,30 +30,24 @@ class Form
         return array_map('htmlspecialchars', $this->data);
     }
 
-    public function getChamp($champ)
+    public function isEmpty(string $field): void
     {
-        $this->trimData();
-        $this->specialcharsData();
-        return $this->data[$champ];
+        if (empty(trim($this->data[$field] ?? ''))) {
+            $this->errors->addError($field, "Le champ $field est requis.");
+        }
     }
 
-    public function isEmpty($champ)
+    public function getChamp(string $field): void
     {
-        if (empty($this->getChamp($champ))) {
-            $this->erreur->addError($champ, "Le champ $champ doit être renseigné");
+        foreach ($this->errors->getErrors($field) as $msg) {
+            echo "<div style='color:red; text-transform:lowercase;'>$msg</div>";
         }
     }
 
     public function isEmailValid($champ)
     {
         if (!filter_var($this->getChamp($champ), FILTER_VALIDATE_EMAIL)) {
-            $this->erreur->addError($champ, "L'addresse mail renseignée n'est pas valide");
-        }
-    }
-
-    public function isDateValid($champ)
-    {
-        if (!($this->getChamp($champ) instanceof DateTime)) {
+            $this->errors->addError($champ, "L'addresse mail renseignée n'est pas valide");
         }
     }
 }

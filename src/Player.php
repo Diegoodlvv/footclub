@@ -10,10 +10,10 @@ class Player implements FirstName, LastName, Model
 {
     private string $firstname;
     private string $lastname;
-    private \DateTime $birthdate;
+    private string $birthdate;
     private string $picture;
 
-    public function __construct(string $firstname, string $lastname, \DateTime $birthdate, string $picture)
+    public function __construct(string $firstname, string $lastname, string $birthdate, string $picture)
     {
         $this->firstname = $firstname;
         $this->lastname = $lastname;
@@ -31,7 +31,7 @@ class Player implements FirstName, LastName, Model
         return $this->lastname;
     }
 
-    public function getBirthdate(): \DateTime
+    public function getBirthdate(): string
     {
         return $this->birthdate;
     }
@@ -51,7 +51,7 @@ class Player implements FirstName, LastName, Model
         $this->lastname = $name;
     }
 
-    public function setBirthdate(\DateTime $date): void
+    public function setBirthdate(string $date): void
     {
         $this->birthdate = $date;
     }

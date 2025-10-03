@@ -4,14 +4,24 @@ namespace App;
 
 class Error
 {
-    protected array $errors;
+    protected array $errors = [];
 
-    public function addError($champ, $message)
+    public function addError(string $champ, string $message): void
     {
-        echo $this->errors[$champ] = $message;
+        $this->errors[$champ][] = $message;
     }
 
-    public function isFormValid()
+    public function getErrors(string $champ): array
+    {
+        return $this->errors[$champ] ?? [];
+    }
+
+    public function all(): array
+    {
+        return $this->errors;
+    }
+
+    public function isFormValid(): bool
     {
         return empty($this->errors);
     }

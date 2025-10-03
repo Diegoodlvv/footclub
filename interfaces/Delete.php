@@ -4,5 +4,5 @@ namespace interfaces;
 
 interface Delete
 {
-    public function delete(Model $model, $id): void;
+    public function delete($id): void;
 }
