@@ -77,19 +77,24 @@ class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify, Read,
         $playerFirstName = $player->getFirstName();
         $playerLastName = $player->getLastName();
         $playerBirthdate = $player->getBirthdate();
+        $playerPicture = $player->getPicture();
 
-        $player->setFirstName($newPlayerData['firstname']);
-        $player->setLastName($newPlayerData['lastname']);
-        $player->setBirthdate($newPlayerData['birthdate']);
 
-        $requete = $this->getPdo()->prepare("UPDATE " . self::TABLE . " SET firstname = :firstname, lastname = :lastname, birthdate = :birthdate  WHERE firstname = :beforeFirstname AND lastname = :beforeLastname AND birthdate = :beforeBirthdate");
-        $requete->bindValue(':firstname', $player->getFirstName());
-        $requete->bindValue(':lastname', $player->getLastName());
-        $requete->bindValue(':birthdate', $player->getBirthdate());
+
+        $requete = $this->getPdo()->prepare("UPDATE " . self::TABLE . " SET firstname = :firstname, lastname = :lastname, birthdate = :birthdate, picture = :picture  WHERE firstname = :beforeFirstname AND lastname = :beforeLastname AND birthdate = :beforeBirthdate AND picture = :beforePicture");
+        $requete->bindValue(':firstname', $newPlayerData['firstname']);
+        $requete->bindValue(':lastname', $newPlayerData['lastname']);
+        $requete->bindValue(':birthdate', $newPlayerData['birthdate']);
+        $requete->bindValue(':picture', $playerPicture);
 
         $requete->bindValue(':beforeFirstname', $playerFirstName);
         $requete->bindValue(':beforeLastname', $playerLastName);
         $requete->bindValue(':beforeBirthdate', $playerBirthdate);
+        $requete->bindValue(':beforePicture', $playerPicture);
         $requete->execute();
+
+        $player->setFirstName($newPlayerData['firstname']);
+        $player->setLastName($newPlayerData['lastname']);
+        $player->setBirthdate($newPlayerData['birthdate']);
     }
 }

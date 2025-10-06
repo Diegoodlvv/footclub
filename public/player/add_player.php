@@ -13,7 +13,6 @@ $requete = new RequetesPlayer();
 
 $requete2 = new RequetesPlayer();
 $players = $requete2->readAll();
-var_dump($players);
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 

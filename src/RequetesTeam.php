@@ -19,6 +19,23 @@ class RequetesTeam extends LoginDatabase
         header("Location: ../");
     }
 
+    public function readAll(): array
+    {
+        $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
+        $requete->execute();
+        $teams = $requete->fetchAll(\PDO::FETCH_ASSOC);
+        return $teams;
+    }
+
+    public function read($id): array
+    {
+        $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");
+        $requete->bindParam(':id', $id);
+        $requete->execute();
+        $team = $requete->fetch(\PDO::FETCH_ASSOC);
+        return $team;
+    }
+
     public function verifExistanceTeam(Team $team): void
     {
         $requete = $this->getPdo()->prepare("SELECT id FROM " . self::TABLE . " WHERE name = :name");
