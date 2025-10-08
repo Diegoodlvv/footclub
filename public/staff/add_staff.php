@@ -54,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <h3 class="player-name"><?= $staff_member['firstname'] . ' ' . $staff_member['lastname'] ?></h3>
                     <p class="player-birthdate">Rôle du staff : <?= $staff_member['role'] ?></p>
                     <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_player.php?id=<?= $staff_member['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_player.php?id=<?= $staff_member['id'] ?>">Supprimer</a></button>
+                        <button class="btn-edit"><a href="modify_staff.php?id=<?= $staff_member['id'] ?>">Modifier</a></button>
+                        <button class="btn-delete"><a href="delete_staff.php?id=<?= $staff_member['id'] ?>">Supprimer</a></button>
                     </div>
                 </div>
             </div>
