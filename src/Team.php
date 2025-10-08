@@ -21,4 +21,11 @@ class Team
     {
         $this->name = $newName;
     }
+
+    public static function arrayToTeam(array $dataTeam): Team
+    {
+        return new Team(
+            $dataTeam['name']
+        );
+    }
 }

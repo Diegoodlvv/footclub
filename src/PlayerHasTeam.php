@@ -2,9 +2,9 @@
 
 namespace App;
 
-use interfaces\Team;
 
-class PlayerHasTeam implements Team
+
+class PlayerHasTeam
 {
     public array $roles = [
         "Attaquant",

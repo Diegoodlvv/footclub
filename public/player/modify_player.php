@@ -1,6 +1,6 @@
 <?php
 
-require_once '../head.php';
+require_once '../head2.php';
 
 $id = $_GET['id'];
 
@@ -10,11 +10,13 @@ use App\Player;
 use App\RequetesPlayer;
 
 
+
 $requeteRead = new RequetesPlayer();
 $player = $requeteRead->read($id);
 $player = Player::arrayToPlayer($player);
 $errors = new Error();
 $data = new Form($_POST, $errors);
+
 
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {

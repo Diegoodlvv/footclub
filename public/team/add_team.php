@@ -1,5 +1,5 @@
 <?php
-require_once '../head.php';
+require_once '../head2.php';
 
 
 use App\Error;
@@ -16,26 +16,21 @@ $teams = $requete2->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $data->isEmpty('firstname');
-    $data->isEmpty('lastname');
-    $data->isEmpty('birthdate');
-    $data->isEmpty('picture');
+    $data->isEmpty('name');
 
     $data->trimData();
     $data->specialcharsData();
 
     $dataArray = $data->getData();
 
-    var_dump($dataArray);
-
     if ($errors->isFormValid()) {
-        $player = new Player($dataArray['firstname'], $dataArray['lastname'], $dataArray['birthdate'], $dataArray['picture']);
-        $requeteVerif = new RequetesPlayer();
-        if ($requeteVerif->verifExistancePlayer($player)) {
-            echo 'Le joueur a déjà été ajouté auparavant';
+        $team = new Team($dataArray['name']);
+        $requeteVerif = new RequetesTeam();
+        if ($requeteVerif->verifExistanceTeam($team)) {
+            echo "L'équipe a déjà été ajouté auparavant";
         } else {
-            $requete->add($player);
-            echo 'Le joueur a été ajouté';
+            $requete->add($team);
+            echo "l'équipe a été ajouté";
         }
     }
 }
@@ -44,18 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <link rel="stylesheet" href="../styles.css">
 
 <div class="container">
-    <h2>Liste des joueurs</h2>
+    <h2>Liste des équipes</h2>
 
     <div class="players-container">
-        <?php foreach ($players as $player) { ?>
+        <?php foreach ($teams as $team) { ?>
             <div class="player-card">
-                <img src="uploads/<?php echo $player['picture'] ?>" alt="Photo du joueur" class="player-photo">
+
                 <div class="player-info">
-                    <h3 class="player-name"><?= $player['firstname'] . ' ' . $player['lastname'] ?></h3>
-                    <p class="player-birthdate">Née le : <?= $player['birthdate'] ?></p>
+                    <h3 class="player-name"><?= $team['name'] ?></h3>
                     <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_player.php?id=<?= $player['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_player.php?id=<?= $player['id'] ?>">Supprimer</a></button>
+                        <button class="btn-edit"><a href="modify_team.php?id=<?= $team['id'] ?>">Modifier</a></button>
+                        <button class="btn-delete"><a href="delete_team.php?id=<?= $team['id'] ?>">Supprimer</a></button>
                     </div>
                 </div>
             </div>
@@ -70,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="input-wrap">
                 <input id="firstname" name="name" type="text" placeholder="Ex. Arsenal" aria-required="true" />
             </div>
-            <?php $data->getChamp('firstname'); ?>
+            <?php $data->getChamp('name'); ?>
         </div>
 
 

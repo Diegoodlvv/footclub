@@ -2,16 +2,22 @@
 
 namespace App;
 
+use App\InterfaceCrud;
+use App\InterfaceModel;
+use App\InterfaceRead;
 
-class RequetesTeam extends LoginDatabase
+
+class RequetesTeam extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     protected const TABLE = "team";
 
-    public function addTeam(Team $team): void
+    public function add(InterfaceModel|Team $team): int
     {
         $requete = $this->getPdo()->prepare("INSERT INTO " . self::TABLE . "(name) values (:name)");
         $requete->bindValue(':name', $team->GetTeamName());
         $requete->execute();
+        $idTeam = $this->getPdo()->lastInsertId();
+        return $idTeam;
     }
 
     public function redirection(): void
@@ -36,31 +42,32 @@ class RequetesTeam extends LoginDatabase
         return $team;
     }
 
-    public function verifExistanceTeam(Team $team): void
+    public function verifExistanceTeam(Team $team): bool
     {
         $requete = $this->getPdo()->prepare("SELECT id FROM " . self::TABLE . " WHERE name = :name");
         $requete->bindValue(':name', $team->GetTeamName());
         $requete->execute();
 
-        if ($requete->fetch(\PDO::FETCH_ASSOC) === false) {
-            $this->addTeam($team);
+        if ($requete->fetch(\PDO::FETCH_ASSOC) == false) {
+            return false;
         } else {
-            echo "Cette équipe a déjà été renseignée </br>";
+            return true;
         }
     }
 
-    public function deleteTeam(Team $team): void
+    public function delete($id): void
     {
-        $requete = $this->getPdo()->prepare('DELETE FROM' . self::TABLE . 'WHERE name = :name');
-        $requete->bindValue(':name', $team->GetTeamName());
+        $requete = $this->getPdo()->prepare('DELETE FROM ' . self::TABLE . ' WHERE id = :id');
+        $requete->bindValue(':id', $id);
         $requete->execute();
-        header("Location: Team.php");
+        header("Location: add_team.php");
     }
 
-    public function modifyTeam(Team $team, string $newTeamName): void
+    public function modify(InterfaceModel|Team $team, array $newTeamData): void
     {
-        $newTeam = $team->SetTeamName($newTeamName);
-        $requete = $this->getPdo()->prepare('UPDATE' . self::TABLE . 'SET name = :name');
-        $requete->bindValue(':name', $newTeam);
+        $team->SetTeamName($newTeamData['name']);
+        $requete = $this->getPdo()->prepare('UPDATE ' . self::TABLE . ' SET name = :name');
+        $requete->bindValue(':name', $newTeamData['name']);
+        $requete->execute();
     }
 }

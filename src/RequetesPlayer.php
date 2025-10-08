@@ -2,18 +2,15 @@
 
 namespace App;
 
-use interfaces\Add;
-use interfaces\Model;
-use interfaces\Delete;
-use interfaces\Modify;
-use interfaces\Read;
-use interfaces\ReadAll;
+use App\InterfaceCrud;
+use App\InterfaceRead;
+use App\InterfaceModel;
 
-class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify, Read, ReadAll
+class RequetesPlayer extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     const TABLE = "player";
 
-    protected function bindValuePlayer($requete, Model|Player $player): void
+    protected function bindValuePlayer($requete, InterfaceModel|Player $player): void
     {
         $requete->bindValue(':firstname', $player->getFirstName());
         $requete->bindValue(':lastname', $player->getLastName());
@@ -43,11 +40,13 @@ class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify, Read,
         return $player;
     }
 
-    public function add(Model|Player $player): void
+    public function add(InterfaceModel|Player $player): int
     {
         $requete = $this->getPdo()->prepare("INSERT INTO " . self::TABLE . " (firstname, lastname, birthdate, picture) values(:firstname, :lastname, :birthdate, :picture)");
         $this->bindValuePlayer($requete, $player);
         $requete->execute();
+        $playerId = $this->pdo->lastInsertId();
+        return $playerId;
     }
 
     public function verifExistancePlayer(Player $player): bool
@@ -72,7 +71,7 @@ class RequetesPlayer extends LoginDatabase implements Add, Delete, Modify, Read,
         $this->redirection();
     }
 
-    public function modify(Model|Player $player, array $newPlayerData): void
+    public function modify(InterfaceModel|Player $player, array $newPlayerData): void
     {
         $playerFirstName = $player->getFirstName();
         $playerLastName = $player->getLastName();

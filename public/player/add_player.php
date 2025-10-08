@@ -1,11 +1,17 @@
 <?php
-require_once '../head.php';
+require_once '../head2.php';
 
 
 use App\Error;
 use App\Form;
 use App\Player;
+use App\PlayerHasTeam;
 use App\RequetesPlayer;
+use App\RequetesTeam;
+use App\Team;
+use App\EnumRolePlayer;
+use App\EnumRoleStaff;
+use App\RequetesPlayerHasTeam;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -14,27 +20,41 @@ $requete = new RequetesPlayer();
 $requete2 = new RequetesPlayer();
 $players = $requete2->readAll();
 
+$requeteTeams = new RequetesTeam();
+$teams = $requeteTeams->readAll();
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $data->isEmpty('firstname');
     $data->isEmpty('lastname');
     $data->isEmpty('birthdate');
     $data->isEmpty('picture');
+    $data->isEmpty('team');
+    $data->isEmpty('role');
 
     $data->trimData();
     $data->specialcharsData();
 
     $dataArray = $data->getData();
 
-    var_dump($dataArray);
-
     if ($errors->isFormValid()) {
         $player = new Player($dataArray['firstname'], $dataArray['lastname'], $dataArray['birthdate'], $dataArray['picture']);
         $requeteVerif = new RequetesPlayer();
+
+        $requeteTeam = new RequetesTeam();
+        $team = $requeteTeam->read($dataArray['team']);
         if ($requeteVerif->verifExistancePlayer($player)) {
             echo 'Le joueur a déjà été ajouté auparavant';
         } else {
-            $requete->add($player);
+            $playerId = $requete->add($player);
+            $requetePlayerHasTeam = new RequetesPlayerHasTeam();
+            $playerTeam = [
+                "team_id" => $team['id'],
+                "player_id" => $playerId,
+                "role" => $dataArray['role']
+            ];
+            $requetePlayerHasTeam->add($playerTeam);
+
             echo 'Le joueur a été ajouté';
         }
     }
@@ -100,6 +120,25 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div id="pictureHint" class="hint">Taille max recommandée : 5 MB — carré de préférence.</div>
             </div> <?php $data->getChamp('picture'); ?>
         </div>
+
+        <label for="team">Equipe</label>
+        <select name="team" class="input-wrap" style="color:  white;">
+            <?php foreach ($teams as $team) { ?>
+                <option value="<?= $team['id'] ?>">
+                    <?= $team['name'] ?>
+                </option>
+            <?php } ?>
+        </select>
+
+        <label for="team">Rôle dans l'équipe</label>
+        <select name="role" class="input-wrap" style="color:  white;">
+            <?php foreach (EnumRolePlayer::cases() as $role) { ?>
+                <option value="<?= $role->value ?> ">
+                    <?= $role->name ?>
+                </option>
+            <?php } ?>
+        </select>
+
 
         <div class="full">
             <div class="actions">

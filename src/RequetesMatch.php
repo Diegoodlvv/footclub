@@ -3,12 +3,11 @@
 namespace App;
 
 
-use interfaces\Add;
-use interfaces\Delete;
-use interfaces\Modify;
-use interfaces\Model;
+use App\Crud;
+use App\Model;
+use App\ReadAll;
 
-class RequetesMatch extends LoginDatabase implements Add, Delete, Modify
+class RequetesMatch extends LoginDatabase implements Crud, ReadAll
 {
     const TABLE = "match";
     private int $teamID;
@@ -28,13 +27,6 @@ class RequetesMatch extends LoginDatabase implements Add, Delete, Modify
         $this->teamID = $requete->fetch(\PDO::FETCH_ASSOC);
     }
 
-    public function selectOpposingClubId(OpposingClub $opponent): void
-    {
-        $requete = $this->getPdo()->prepare("SELECT id FROM opposing_club WHERE address = :address");
-        $requete->bindParam(":address", $opponent->getAdress());
-        $requete->execute();
-        $this->opposing_club_id = $requete->fetch(\PDO::FETCH_ASSOC);
-    }
 
     public function bindValueMatch($requete, Matchs $match): void
     {

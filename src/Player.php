@@ -2,16 +2,15 @@
 
 namespace App;
 
-use interfaces\FirstName;
-use interfaces\LastName;
-use interfaces\Model;
+use App\InterfaceInfosName;
 
-class Player implements FirstName, LastName, Model
+
+class Player
 {
-    private string $firstname;
-    private string $lastname;
-    private string $birthdate;
-    private string $picture;
+    protected string $firstname;
+    protected string $lastname;
+    protected string $birthdate;
+    protected string $picture;
 
     public function __construct(string $firstname, string $lastname, string $birthdate, string $picture)
     {
