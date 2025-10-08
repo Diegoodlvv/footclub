@@ -19,8 +19,6 @@ class Staff
         $this->role = $role;
     }
 
-    // --- GETTERS ---
-
     public function getFirstname(): string
     {
         return $this->firstname;
@@ -40,8 +38,6 @@ class Staff
     {
         return $this->role;
     }
-
-    // --- SETTERS ---
 
     public function setFirstname(string $firstname): void
     {

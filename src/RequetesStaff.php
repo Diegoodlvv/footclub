@@ -17,12 +17,12 @@ class RequetesStaff extends LoginDatabase implements InterfaceCrud, InterfaceRea
         $requete->bindValue(':firstname', $staff_member->getFirstname());
         $requete->bindValue(':lastname', $staff_member->getLastname());
         $requete->bindValue(':picture', $staff_member->getPicture());
-        $requete->bindValue(':role', $staff_member->getRole());
+        $requete->bindValue(':role', $staff_member->getRole()->value);
     }
 
     public function verifyExistanceStaff(Staff $staff_member): bool
     {
-        $requete = $this->getPdo()->prepare("SELECT id FROM " . self::TABLE . " firstname = :firstname, lastname = :lastname, picture = :picture, role = :role");
+        $requete = $this->getPdo()->prepare("SELECT id FROM " . self::TABLE . " WHERE firstname = :firstname AND lastname = :lastname AND picture = :picture AND role = :role");
         $this->bindValueStaff($requete, $staff_member);
         $requete->execute();
 
@@ -35,7 +35,7 @@ class RequetesStaff extends LoginDatabase implements InterfaceCrud, InterfaceRea
 
     public function add(InterfaceModel|Staff $staff_member): int
     {
-        $requete = $this->getPdo()->prepare('INSERT INTO ' . self::TABLE . ' (id, firstname, lastname, picture, role) values (0, :firstname, :lastname, :picture, :role');
+        $requete = $this->getPdo()->prepare('INSERT INTO ' . self::TABLE . ' (id, firstname, lastname, picture, role) VALUES (0, :firstname, :lastname, :picture, :role)');
         $this->bindValueStaff($requete, $staff_member);
         $requete->execute();
         $StaffId = $this->getPdo()->lastInsertId();

@@ -1,7 +1,7 @@
 <?php
 require_once '../head2.php';
 
-
+use App\EnumRolePlayer;
 use App\Error;
 use App\Form;
 use App\Staff;
@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $data->specialcharsData();
 
     $dataArray = $data->getData();
-    var_dump(EnumRoleStaff::tryFrom($dataArray['role']));
+    $role = EnumRoleStaff::from($dataArray['role']);
     if ($errors->isFormValid()) {
-        $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], EnumRoleStaff::tryFrom($dataArray['role']));
+        $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], $role);
         $requeteStaff = new RequetesStaff();
         if ($requeteStaff->verifyExistanceStaff($staff_member)) {
             echo 'Ce membre du staff a déjà été renseigné';
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Rôle dans l'équipe</label>
         <select name="role" class="input-wrap" style="color:  white;">
             <?php foreach (EnumRoleStaff::cases() as $role) { ?>
-                <option value="<?= $role->value ?> ">
+                <option value="<?= $role->value ?>">
                     <?= $role->name ?>
                 </option>
             <?php } ?>
