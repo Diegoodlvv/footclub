@@ -27,11 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $data->specialcharsData();
 
     $dataArray = $data->getData();
-
+    var_dump(EnumRoleStaff::tryFrom($dataArray['role']));
     if ($errors->isFormValid()) {
-        $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], $dataArray['role']);
+        $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], EnumRoleStaff::tryFrom($dataArray['role']));
         $requeteStaff = new RequetesStaff();
-        if ($requeteStaff->verifyExistanceStaff()) {
+        if ($requeteStaff->verifyExistanceStaff($staff_member)) {
             echo 'Ce membre du staff a déjà été renseigné';
         } else {
             $requete->add($staff_member);
