@@ -4,7 +4,7 @@ namespace App;
 
 use App\EnumRoleStaff;
 
-class Staff
+final class Staff
 {
     protected string $firstname;
     protected string $lastname;
@@ -57,5 +57,17 @@ class Staff
     public function setRole(EnumRoleStaff $role): void
     {
         $this->role = $role;
+    }
+
+    public static function arrayToStaff(array $data): Staff
+    {
+        $staff_member = new Staff(
+            $data['firstname'],
+            $data['lastname'],
+            $data['picture'],
+            $data['role']
+        );
+
+        return $staff_member;
     }
 }

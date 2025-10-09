@@ -4,7 +4,7 @@ namespace App;
 
 use DateTime;
 
-class Form
+final class Form
 {
     protected array $data;
     protected Error $errors;

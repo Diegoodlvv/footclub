@@ -5,7 +5,7 @@ namespace App;
 use App\InterfaceInfosName;
 
 
-class Player
+final class Player
 {
     protected string $firstname;
     protected string $lastname;

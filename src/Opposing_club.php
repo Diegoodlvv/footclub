@@ -2,9 +2,9 @@
 
 namespace App;
 
-use interfaces\City;
 
-class OpposingClub implements City
+
+final class OpposingClub
 {
 
     public string $adress;

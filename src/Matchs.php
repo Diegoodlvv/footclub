@@ -2,11 +2,10 @@
 
 namespace App;
 
-use interfaces\City;
-use interfaces\Team;
-use interfaces\Model;
+use App\Team;
+use App\InterfaceModel;
 
-class Matchs implements City, Model
+final class Matchs implements InterfaceModel
 {
 
     private int $team_score;

@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Error
+final class Error
 {
     protected array $errors = [];
 

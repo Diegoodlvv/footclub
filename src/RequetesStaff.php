@@ -65,7 +65,7 @@ class RequetesStaff extends LoginDatabase implements InterfaceCrud, InterfaceRea
 
     public function read($id): array
     {
-        $requete = $this->getPdo()->prepare('SELECT * FROM  ' . self::TABLE . ' id = :id');
+        $requete = $this->getPdo()->prepare('SELECT * FROM  ' . self::TABLE . ' WHERE id = :id');
         $requete->bindValue(':id', $id);
         $requete->execute();
         return $requete->fetch(\PDO::FETCH_ASSOC);

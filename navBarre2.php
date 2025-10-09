@@ -1,10 +1,3 @@
-<?php
-
-require_once 'head.php';
-
-?>
-
-
 <nav class="navBarre">
     <ul class="navList">
         <li class="navItem">

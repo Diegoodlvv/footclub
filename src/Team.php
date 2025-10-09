@@ -3,7 +3,7 @@
 namespace App;
 
 
-class Team
+final class Team
 {
     private string $name;
 
