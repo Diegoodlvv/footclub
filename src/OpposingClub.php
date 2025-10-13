@@ -7,8 +7,8 @@ namespace App;
 final class OpposingClub
 {
 
-    public string $adress;
-    public string $city;
+    protected string $adress;
+    protected string $city;
 
     public function __construct(string $adress, string $city)
     {

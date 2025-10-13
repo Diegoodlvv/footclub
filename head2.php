@@ -3,7 +3,6 @@
 namespace public;
 
 require_once __DIR__ . '/autoloader.php';
-Autoloader::register();
 require_once 'NavBarre2.php';
 
 ?>

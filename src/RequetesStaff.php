@@ -53,14 +53,10 @@ class RequetesStaff extends LoginDatabase implements InterfaceCrud, InterfaceRea
     {
         $staff_member->setFirstname($newStaffData['firstname']);
         $staff_member->setLastname($newStaffData['lastname']);
-        $staff_member->setPicture($newStaffData['picture']);
-        $staff_member->setRole($newStaffData['role']);
 
         $requete = $this->getPdo()->prepare('UPDATE ' . self::TABLE . ' SET firstname = :firstname, lastname = :lastname, picture = :picture, role = :role WHERE firstname = :BeforeFirstname, lastname = :BeforeLastname, picture = :BeforePicture, role = :BeforeRole');
         $requete->bindValue(':firstname', $newStaffData['firstname']);
         $requete->bindValue(':lastname', $newStaffData['lastname']);
-        $requete->bindValue(':picture', $newStaffData['picture']);
-        $requete->bindValue(':role', $newStaffData['role']);
     }
 
     public function read($id): array

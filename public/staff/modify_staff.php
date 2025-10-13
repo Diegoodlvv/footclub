@@ -17,14 +17,13 @@ $requete = new RequetesStaff();
 
 $requete2 = new RequetesStaff();
 $staff_member = $requete2->read($id);
-$staff_member['role'] == EnumRoleStaff::from($staff_member['role']);
+$staff_member['role'] = EnumRoleStaff::from($staff_member['role']);
 $staff_member = Staff::arrayToStaff($staff_member);
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $data->isEmpty('firstname');
     $data->isEmpty('lastname');
-    $data->isEmpty('picture');
     $data->isEmpty('role');
 
     $data->trimData();
@@ -43,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <link rel="stylesheet" href="../styles.css">
 
 <div class="container">
-    <h2 style="margin-top: 120px;">Modifier le membre du staff <?php echo $staff_member['firstname'] . ' ' . $staff_member['lastname'] ?></h2>
+    <h2 style="margin-top: 120px;">Modifier le membre du staff <?php echo $staff_member->getFirstname() . ' ' . $staff_member->getLastname() ?></h2>
 
     <form id="mainForm" method="post">
         <div>
@@ -65,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Rôle dans l'équipe</label>
         <select name="role" class="input-wrap" style="color:  white;">
 
-            <option value="<?= $staff_member->getRole() ?>">
-                <?= $staff_member->getRole() ?>
+            <option>
+                <?= $staff_member->getRole()->name ?>
             </option>
 
         </select>

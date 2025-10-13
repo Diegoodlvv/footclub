@@ -1,0 +1,16 @@
+{
+    "name": "vendor/composer.json",
+    "description": "json",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\ComposerJson\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Diego"
+        }
+    ],
+    "require": {}
+}

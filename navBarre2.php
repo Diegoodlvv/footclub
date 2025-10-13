@@ -24,5 +24,11 @@
                 <span class="navText">Matchs</span>
             </a>
         </li>
+        <li class="navItem">
+            <a href="../opposingClub/add_opposing_club.php">
+                <span class="navIcon">⚽</span>
+                <span class="navText">Equipes adverses</span>
+            </a>
+        </li>
     </ul>
 </nav>

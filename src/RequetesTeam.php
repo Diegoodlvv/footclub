@@ -70,4 +70,12 @@ class RequetesTeam extends LoginDatabase implements InterfaceCrud, InterfaceRead
         $requete->bindValue(':name', $newTeamData['name']);
         $requete->execute();
     }
+
+    public function readTeamID(string $name): int
+    {
+        $requete = $this->getPdo()->prepare('SELECT id FROM ' . self::TABLE . ' WHERE name = :name');
+        $requete->bindParam(':name', $name);
+        $id = $requete->fetch(\PDO::FETCH_ASSOC);
+        return $id;
+    }
 }

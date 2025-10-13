@@ -18,11 +18,6 @@ class RequetesPlayer extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete->bindValue(':picture', $player->getPicture());
     }
 
-    public function redirection(): void
-    {
-        header("Location: ../player.php");
-    }
-
     public function readAll(): array
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
@@ -68,7 +63,6 @@ class RequetesPlayer extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE id = :id");
         $requete->bindValue(':id', $id);
         $requete->execute();
-        $this->redirection();
     }
 
     public function modify(InterfaceModel|Player $player, array $newPlayerData): void

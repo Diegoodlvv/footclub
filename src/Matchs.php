@@ -50,6 +50,11 @@ final class Matchs implements InterfaceModel
         return $this->city;
     }
 
+    public function getTeamScore(): int
+    {
+        return $this->team_score;
+    }
+
     public function getOpposing_club()
     {
         return $this->opposing_club;
