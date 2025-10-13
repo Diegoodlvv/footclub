@@ -8,9 +8,7 @@ use App\Player;
 use App\PlayerHasTeam;
 use App\RequetesPlayer;
 use App\RequetesTeam;
-use App\Team;
 use App\EnumRolePlayer;
-use App\EnumRoleStaff;
 use App\RequetesPlayerHasTeam;
 
 $errors = new Error();

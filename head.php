@@ -1,9 +1,7 @@
 <?php
 
-namespace public;
 
-require_once __DIR__ . '/autoloader.php';
-Autoloader::register();
+require_once __DIR__ . '../vendor/autoload.php';
 require_once 'NavBarre.php';
 
 ?>

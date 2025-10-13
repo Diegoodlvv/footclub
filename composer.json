@@ -1,10 +1,10 @@
 {
-    "name": "vendor/composer.json",
+    "name": "diego/footclub",
     "description": "json",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "Vendor\\ComposerJson\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
@@ -12,5 +12,7 @@
             "name": "Diego"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.88"
+    }
 }
