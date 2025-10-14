@@ -2,10 +2,10 @@
 
 require_once '../../include/head2.php';
 
-use App\RequetesPlayer;
+use App\Controller\ControllerPlayer;
 
 $id = $_GET['id'];
-$requete = new RequetesPlayer();
+$requete = new ControllerPlayer();
 
 $requete->delete($id);
 header("Location: add_player.php");

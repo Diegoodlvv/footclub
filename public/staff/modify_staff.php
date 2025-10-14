@@ -3,19 +3,19 @@ require_once '../../include/head2.php';
 
 $id = $_GET['id'];
 
-use App\EnumRolePlayer;
-use App\Error;
-use App\Form;
-use App\Staff;
-use App\RequetesStaff;
-use App\EnumRoleStaff;
-use App\RequetesPlayerHasTeam;
+use App\Enum\EnumRolePlayer;
+use App\Enum\EnumRoleStaff;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Staff;
+use App\Controller\ControllerStaff;
+use App\Controller\ControllerPlayerHasTeam;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
-$requete = new RequetesStaff();
+$requete = new ControllerStaff();
 
-$requete2 = new RequetesStaff();
+$requete2 = new ControllerStaff();
 $staff_member = $requete2->read($id);
 $staff_member['role'] = EnumRoleStaff::from($staff_member['role']);
 $staff_member = Staff::arrayToStaff($staff_member);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $dataArray = $data->getData();
 
     if ($errors->isFormValid()) {
-        $requeteModify = new RequetesStaff();
+        $requeteModify = new ControllerStaff();
         $requeteModify->modify($staff_member, $dataArray);
         header("Location: add_staff.php");
     }

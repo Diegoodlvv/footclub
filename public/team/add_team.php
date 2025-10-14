@@ -2,17 +2,17 @@
 require_once '../../include/head2.php';
 
 
-use App\Error;
-use App\Form;
-use App\Team;
-use App\RequetesTeam;
-use App\Message;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Team;
+use App\Controller\ControllerTeam;
+use App\Model\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
-$requete = new RequetesTeam();
+$requete = new ControllerTeam();
 
-$requete2 = new RequetesTeam();
+$requete2 = new ControllerTeam();
 $teams = $requete2->readAll();
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($errors->isFormValid()) {
         $team = new Team($dataArray['name']);
-        $requeteVerif = new RequetesTeam();
+        $requeteVerif = new ControllerTeam();
         if ($requeteVerif->verifExistanceTeam($team)) {
             $_SESSION['message_team'] = 'false';
         } else {

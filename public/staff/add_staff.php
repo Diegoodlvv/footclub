@@ -1,18 +1,18 @@
 <?php
 require_once '../../include/head2.php';
 
-use App\Error;
-use App\Form;
-use App\Staff;
-use App\RequetesStaff;
-use App\EnumRoleStaff;
-use App\Message;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Staff;
+use App\Controller\ControllerStaff;
+use App\Enum\EnumRoleStaff;
+use App\Model\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
-$requete = new RequetesStaff();
+$requete = new ControllerStaff();
 
-$requete2 = new RequetesStaff();
+$requete2 = new ControllerStaff();
 $staff_members = $requete2->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $role = EnumRoleStaff::from($dataArray['role']);
     if ($errors->isFormValid()) {
         $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], $role);
-        $requeteStaff = new RequetesStaff();
+        $requeteStaff = new ControllerStaff();
         if ($requeteStaff->verifyExistanceStaff($staff_member)) {
             $_SESSION['message_staff'] = 'false';
         } else {

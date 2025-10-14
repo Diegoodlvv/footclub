@@ -2,14 +2,14 @@
 require_once '../../include/head2.php';
 
 
-use App\Error;
-use App\Form;
-use App\Team;
-use App\RequetesTeam;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Team;
+use App\Controller\ControllerTeam;
 
 $id = $_GET['id'];
 
-$requeteRead = new RequetesTeam();
+$requeteRead = new ControllerTeam();
 $team = $requeteRead->read($id);
 $team = Team::arrayToTeam($team);
 $errors = new Error();
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $dataArray = $data->getData();
 
     if ($errors->isFormValid()) {
-        $requeteModify = new RequetesTeam();
+        $requeteModify = new ControllerTeam();
         $requeteModify->modify($team, $dataArray);
         header("Location: add_team.php");
     }

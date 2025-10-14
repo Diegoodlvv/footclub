@@ -2,23 +2,23 @@
 require_once '../../include/head2.php';
 
 
-use App\Error;
-use App\Form;
-use App\Player;
-use App\RequetesPlayer;
-use App\RequetesTeam;
-use App\EnumRolePlayer;
-use App\RequetesPlayerHasTeam;
-use App\Message;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Player;
+use App\Controller\ControllerPlayer;
+use App\Controller\ControllerTeam;
+use App\Enum\EnumRolePlayer;
+use App\Controller\ControllerPlayerHasTeam;
+use App\Model\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
-$requete = new RequetesPlayer();
+$requete = new ControllerPlayer();
 
-$requete2 = new RequetesPlayer();
+$requete2 = new ControllerPlayer();
 $players = $requete2->readAll();
 
-$requeteTeams = new RequetesTeam();
+$requeteTeams = new ControllerTeam();
 $teams = $requeteTeams->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -37,16 +37,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($errors->isFormValid()) {
         $player = new Player($dataArray['firstname'], $dataArray['lastname'], $dataArray['birthdate'], $dataArray['picture']);
-        $requeteVerif = new RequetesPlayer();
+        $requeteVerif = new ControllerPlayer();
 
-        $requeteTeam = new RequetesTeam();
+        $requeteTeam = new ControllerTeam();
         $team = $requeteTeam->read($dataArray['team']);
         if ($requeteVerif->verifExistancePlayer($player)) {
 
             $_SESSION['message_player'] = 'false';
         } else {
             $playerId = $requete->add($player);
-            $requetePlayerHasTeam = new RequetesPlayerHasTeam();
+            $requetePlayerHasTeam = new ControllerPlayerHasTeam();
             $playerTeam = [
                 "team_id" => $team['id'],
                 "player_id" => $playerId,

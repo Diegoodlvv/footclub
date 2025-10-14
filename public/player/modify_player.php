@@ -4,14 +4,14 @@ require_once '../../include/head2.php';
 
 $id = $_GET['id'];
 
-use App\Error;
-use App\Form;
-use App\Player;
-use App\RequetesPlayer;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\Player;
+use App\Controller\ControllerPlayer;
 
 
 
-$requeteRead = new RequetesPlayer();
+$requeteRead = new ControllerPlayer();
 $player = $requeteRead->read($id);
 $player = Player::arrayToPlayer($player);
 $errors = new Error();
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $dataArray = $data->getData();
 
     if ($errors->isFormValid()) {
-        $requeteModify = new RequetesPlayer();
+        $requeteModify = new ControllerPlayer();
         $requeteModify->modify($player, $dataArray);
         header("Location: add_player.php");
     }
