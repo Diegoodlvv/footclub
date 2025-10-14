@@ -1,12 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
-use App\InterfaceCrud;
-use App\InterfaceRead;
-use App\InterfaceModel;
+use App\Interfaces\InterfaceCrud;
+use App\Interfaces\InterfaceRead;
+use App\Interfaces\InterfaceModel;
+use App\Model\LoginDatabase;
+use App\Model\Player;
 
-class RequetesPlayer extends LoginDatabase implements InterfaceCrud, InterfaceRead
+class ControllerPlayer extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     const TABLE = "player";
 

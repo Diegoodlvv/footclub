@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
-use App\EnumRoleStaff;
+use App\Enum\EnumRoleStaff;
 
 final class Staff
 {

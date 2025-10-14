@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 class Message
 {
@@ -33,5 +33,15 @@ class Message
     public static function msgErrorStaff(): void
     {
         echo "❌ Le membre du staff existe déjà dans la base de données.";
+    }
+
+    public static function msgSuccesClub(): void
+    {
+        echo "✅ L'équipe adverse a été ajoutée avec succès !";
+    }
+
+    public static function msgErrorClub(): void
+    {
+        echo "❌ L'équipe adverse existe déjà dans la base de données.";
     }
 }

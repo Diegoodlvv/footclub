@@ -2,16 +2,17 @@
 require_once '../../include/head2.php';
 
 
-use App\Error;
-use App\Form;
-use App\OpposingClub;
-use App\RequetesOpposingClub;
+use App\Model\Error;
+use App\Model\Form;
+use App\Model\OpposingClub;
+use App\Controller\ControllerOpposingClub;
+use App\Model\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
-$requete = new RequetesOpposingClub();
+$requete = new ControllerOpposingClub();
 
-$requete2 = new RequetesOpposingClub();
+$requete2 = new ControllerOpposingClub();
 $opposing_clubs = $requete2->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -27,12 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($errors->isFormValid()) {
         $opposing_club = new OpposingClub($dataArray['name'], $dataArray['address'], $dataArray['city']);
-        $requeteVerif = new RequetesOpposingClub();
+        $requeteVerif = new ControllerOpposingClub();
         if ($requeteVerif->verifyOpposingClub($opposing_club)) {
             $requete->add($opposing_club);
-            echo "l'équipe a été ajouté";
+            $_SESSION['message_club'] = "true";
         } else {
-            echo "L'équipe adverse a déjà été ajouté auparavant";
+            $_SESSION['message_club'] = 'false';
         }
         header("Location: add_opposing_club.php");
         exit;
@@ -43,6 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
+
+    <?php if (isset($_SESSION['message_club']) && $_SESSION['message_club'] == 'true') { ?>
+        <div class="success-message">
+            <?php Message::msgSuccesClub() ?>
+        </div>
+    <?php } else if (isset($_SESSION['message_club']) && $_SESSION['message_club']  == 'false') { ?>
+        <div class="error-message">
+            <?php Message::msgErrorClub() ?>
+        </div>
+    <?php } ?>
+    <?php unset($_SESSION['message_club']) ?>
+
     <h2>Liste des équipes adverses</h2>
 
     <div class="players-container">
@@ -55,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div class="player-card">
 
                     <div class="player-info">
-                        <h3 class="player-name"><?= $opposing_club['name'] ?></h3>
+                        <h3 class="player-name" style="padding-bottom: 10px;"><?= $opposing_club['name'] ?></h3>
                         <p class="player-birthdate">Adresse : <?= $opposing_club['address'] ?></p>
                         <p class="player-birthdate">Ville : <?= $opposing_club['city'] ?></p>
                         <div class="player-actions">
@@ -80,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
 
         <div>
-            <label for="address">adresse de l'équipe</label>
+            <label for="address">Adresse de l'équipe</label>
             <div class="input-wrap">
                 <input id="address" name="address" type="text" placeholder="Ex. parc des princes" aria-required="true" />
             </div>
@@ -88,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
 
         <div>
-            <label for="city">ville</label>
+            <label for="city">Ville de l'équipe</label>
             <div class="input-wrap">
                 <input id="city" name="city" type="text" placeholder="Ex. Paris" aria-required="true" />
             </div>

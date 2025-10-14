@@ -1,8 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
-use DateTime;
 
 final class Form
 {

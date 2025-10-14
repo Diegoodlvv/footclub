@@ -1,14 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
-use App\LoginDatabase;
-use App\InterfaceCrud;
-use App\InterfaceRead;
-use App\Staff;
+use App\Model\LoginDatabase;
+use App\Interfaces\InterfaceCrud;
+use App\Interfaces\InterfaceRead;
+use App\Interfaces\InterfaceModel;
+use App\Model\Staff;
 
 
-class RequetesStaff extends LoginDatabase implements InterfaceCrud, InterfaceRead
+class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     protected const TABLE = "staff_member";
 

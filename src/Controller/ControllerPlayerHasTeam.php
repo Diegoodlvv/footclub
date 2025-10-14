@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
 
-use App\InterfaceModel;
-use App\InterfaceRead;
+use App\Interfaces\InterfaceRead;
+use App\Model\LoginDatabase;
 
-class RequetesPlayerHasTeam extends LoginDatabase implements InterfaceRead
+class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 {
     const TABLE = "player_has_team";
 

@@ -193,6 +193,7 @@ input[type="file"] {
     gap: 10px;
     padding: 10px 14px;
     border-radius: 10px;
+    margin-top: 10px;
     border: 0;
     cursor: pointer;
     font-weight: 600;

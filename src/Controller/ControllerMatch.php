@@ -1,21 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
+use App\Interfaces\InterfaceCrud;
+use App\Interfaces\InterfaceModel;
+use App\Interfaces\InterfaceRead;
+use App\Model\LoginDatabase;
+use App\Model\Matchs;
 
-use App\InterfaceCrud;
-use App\InterfacesModel;
-use App\InterfaceRead;
-use App\RequetesTeam;
-
-class RequetesMatch extends LoginDatabase implements InterfaceCrud, InterfaceRead
+class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     const TABLE = "match";
 
 
     public function bindValueMatch($requete, Matchs $match): void
     {
-        $requeteTeam = new RequetesTeam();
+        $requeteTeam = new ControllerTeam();
         $idTeam = $requeteTeam->readTeamID($match->getTeam()->GetTeamName());
 
 

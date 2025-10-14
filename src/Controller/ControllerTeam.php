@@ -1,13 +1,15 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
-use App\InterfaceCrud;
-use App\InterfaceModel;
-use App\InterfaceRead;
+use App\Interfaces\InterfaceCrud;
+use App\Interfaces\InterfaceModel;
+use App\Interfaces\InterfaceRead;
+use App\Model\LoginDatabase;
+use App\Model\Team;
 
 
-class RequetesTeam extends LoginDatabase implements InterfaceCrud, InterfaceRead
+class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     protected const TABLE = "team";
 

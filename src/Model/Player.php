@@ -1,9 +1,6 @@
 <?php
 
-namespace App;
-
-use App\InterfaceInfosName;
-
+namespace App\Model;
 
 final class Player
 {

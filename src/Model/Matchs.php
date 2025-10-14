@@ -1,11 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
-use App\Team;
-use App\InterfaceModel;
+use App\Model\Team;
 
-final class Matchs implements InterfaceModel
+final class Matchs
 {
 
     private int $team_score;

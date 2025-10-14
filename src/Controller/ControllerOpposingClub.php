@@ -1,8 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Controller;
 
-class RequetesOpposingClub extends LoginDatabase implements InterfaceCrud, InterfaceRead
+use App\Interfaces\InterfaceCrud;
+use App\Interfaces\InterfaceModel;
+use App\Interfaces\InterfaceRead;
+use App\Model\LoginDatabase;
+use App\Model\OpposingClub;
+
+class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     protected const TABLE = 'opposing_club';
 
