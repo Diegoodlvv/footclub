@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
     <h2>Liste des équipes adverses</h2>

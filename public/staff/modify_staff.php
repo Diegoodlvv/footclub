@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $data->isEmpty('firstname');
     $data->isEmpty('lastname');
-    $data->isEmpty('role');
 
     $data->trimData();
     $data->specialcharsData();
@@ -39,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
     <h2 style="margin-top: 120px;">Modifier le membre du staff <?php echo $staff_member->getFirstname() . ' ' . $staff_member->getLastname() ?></h2>
@@ -62,13 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
 
         <label for="team">Rôle dans l'équipe</label>
-        <select name="role" class="input-wrap" style="color:  white;">
+        <div class="input-wrap">
+            <input id="lastname" name="role" type="text" placeholder="Ex. Dupont" required aria-required="true" value="<?php echo $staff_member->getRole()->name ?>" />
+        </div>
 
-            <option>
-                <?= $staff_member->getRole()->name ?>
-            </option>
-
-        </select>
 
 
         <div class="full">

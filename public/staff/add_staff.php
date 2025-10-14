@@ -1,13 +1,12 @@
 <?php
 require_once '../../include/head2.php';
 
-use App\EnumRolePlayer;
 use App\Error;
 use App\Form;
 use App\Staff;
 use App\RequetesStaff;
 use App\EnumRoleStaff;
-use App\RequetesPlayerHasTeam;
+use App\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -32,24 +31,36 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], $role);
         $requeteStaff = new RequetesStaff();
         if ($requeteStaff->verifyExistanceStaff($staff_member)) {
-            echo 'Ce membre du staff a déjà été renseigné';
+            $_SESSION['message_staff'] = 'false';
         } else {
             $requete->add($staff_member);
-            echo 'Ce nouveau membre du staff a bien été ajouté';
+            $_SESSION['message_staff'] = 'true';
         }
+        header('Location: add_staff.php');
     }
 }
 ?>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
+    <?php if (isset($_SESSION['message_staff']) && $_SESSION['message_staff'] == 'true') { ?>
+        <div class="success-message">
+            <?php Message::msgSuccesStaff() ?>
+        </div>
+    <?php } else if (isset($_SESSION['message_staff']) && $_SESSION['message_staff']  == 'false') { ?>
+        <div class="error-message">
+            <?php Message::msgErrorStaff() ?>
+            <?php unset($_SESSION['message_staff']) ?>
+        </div>
+    <?php } ?>
+
     <h2>Liste des membres du staff</h2>
 
     <div class="players-container">
         <?php foreach ($staff_members as $staff_member) { ?>
             <div class="player-card">
-                <img src="uploads/<?php echo $staff_member['picture'] ?>" alt="Photo du joueur" class="player-photo">
+                <img src="../../img/<?php echo $staff_member['picture'] ?>" alt="Photo du joueur" class="player-photo">
                 <div class="player-info">
                     <h3 class="player-name"><?= $staff_member['firstname'] . ' ' . $staff_member['lastname'] ?></h3>
                     <p class="player-birthdate">Rôle du staff : <?= $staff_member['role'] ?></p>

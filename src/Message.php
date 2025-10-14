@@ -24,4 +24,14 @@ class Message
     {
         echo "❌ Le joueur existe déjà dans la base de données.";
     }
+
+    public static function msgSuccesStaff(): void
+    {
+        echo "✅ Le membre du staff a été ajoutée avec succès !";
+    }
+
+    public static function msgErrorStaff(): void
+    {
+        echo "❌ Le membre du staff existe déjà dans la base de données.";
+    }
 }

@@ -5,11 +5,11 @@ require_once '../../include/head2.php';
 use App\Error;
 use App\Form;
 use App\Player;
-use App\PlayerHasTeam;
 use App\RequetesPlayer;
 use App\RequetesTeam;
 use App\EnumRolePlayer;
 use App\RequetesPlayerHasTeam;
+use App\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -42,7 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $requeteTeam = new RequetesTeam();
         $team = $requeteTeam->read($dataArray['team']);
         if ($requeteVerif->verifExistancePlayer($player)) {
-            echo 'Le joueur a déjà été ajouté auparavant';
+
+            $_SESSION['message_player'] = 'false';
         } else {
             $playerId = $requete->add($player);
             $requetePlayerHasTeam = new RequetesPlayerHasTeam();
@@ -53,21 +54,35 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             ];
             $requetePlayerHasTeam->add($playerTeam);
 
-            echo 'Le joueur a été ajouté';
+            $_SESSION['message_player'] = 'true';
         }
+        header("Location: add_player.php");
+        exit;
     }
 }
 ?>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
+
+    <?php if (isset($_SESSION['message_player']) && $_SESSION['message_player'] == 'true') { ?>
+        <div class="success-message">
+            <?php Message::msgSuccesPlayer() ?>
+        </div>
+    <?php } else if (isset($_SESSION['message_player']) && $_SESSION['message_player']  == 'false') { ?>
+        <div class="error-message">
+            <?php Message::msgErrorPlayer() ?>
+        </div>
+    <?php } ?>
+    <?php unset($_SESSION['message_player']) ?>
+
     <h2>Liste des joueurs</h2>
 
     <div class="players-container">
         <?php foreach ($players as $player) { ?>
             <div class="player-card">
-                <img src="uploads/<?php echo $player['picture'] ?>" alt="Photo du joueur" class="player-photo">
+                <img src="../../img/<?php echo $player['picture'] ?>" alt="Photo du joueur" class="player-photo">
                 <div class="player-info">
                     <h3 class="player-name"><?= $player['firstname'] . ' ' . $player['lastname'] ?></h3>
                     <p class="player-birthdate">Née le : <?= $player['birthdate'] ?></p>

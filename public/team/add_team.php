@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $team = new Team($dataArray['name']);
         $requeteVerif = new RequetesTeam();
         if ($requeteVerif->verifExistanceTeam($team)) {
-            $_SESSION['message'] = 'false';
+            $_SESSION['message_team'] = 'false';
         } else {
             $requete->add($team);
-            $_SESSION['message'] = 'true';
+            $_SESSION['message_team'] = 'true';
         }
         header("Location: add_team.php");
         exit;
@@ -38,19 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 }
 ?>
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../include/styles.css">
 
 
 
 <div class="container">
 
-    <?php if ($_SESSION['message'] == 'true') { ?>
+    <?php if (isset($_SESSION['message_team']) && $_SESSION['message_team'] == 'true') { ?>
         <div class="success-message">
             <?php Message::msgSuccesTeam() ?>
         </div>
-    <?php } else if ($_SESSION['message'] == 'false') { ?>
+    <?php } else if (isset($_SESSION['message_team']) && $_SESSION['message_team']  == 'false') { ?>
         <div class="error-message">
             <?php Message::msgErrorTeam() ?>
+            <?php unset($_SESSION['message_team']) ?>
         </div>
     <?php } ?>
 
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="player-card">
 
                 <div class="player-info">
-                    <h3 class="player-name"><?= $team['name'] ?></h3>
+                    <h3 class="player-name" style="padding-bottom: 15px;"><?= $team['name'] ?></h3>
                     <div class="player-actions">
                         <button class="btn-edit"><a href="modify_team.php?id=<?= $team['id'] ?>">Modifier</a></button>
                         <button class="btn-delete"><a href="delete_team.php?id=<?= $team['id'] ?>">Supprimer</a></button>
