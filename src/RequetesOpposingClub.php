@@ -15,17 +15,34 @@ class RequetesOpposingClub extends LoginDatabase implements InterfaceCrud, Inter
         return $opposingClub;
     }
 
-    public function readAll(): array
+    public function readAll(): array|false
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
-        $opposing_clubs = $requete->fetch(\PDO::FETCH_ASSOC);
+        $opposing_clubs = $requete->fetchAll(\PDO::FETCH_ASSOC);
         return $opposing_clubs;
+    }
+
+    public function verifyOpposingClub(OpposingClub $opposing_club): bool
+    {
+        $requete = $this->getPdo()->prepare('SELECT id FROM ' . self::TABLE . ' WHERE name = :name AND address = :address AND city= :city');
+        $requete->bindValue(':name', $opposing_club->getName());
+        $requete->bindValue(':city', $opposing_club->getCity());
+        $requete->bindValue(':address', $opposing_club->getAdress());
+        $requete->execute();
+
+        var_dump($requete->fetch(\PDO::FETCH_ASSOC) === false);
+        if ($requete->fetch(\PDO::FETCH_ASSOC) === false) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function add(InterfaceModel|OpposingClub $opposing_club): int
     {
-        $requete = $this->getPdo()->prepare('INSERT INTO ' . self::TABLE . ' VALUES (:city, :address)');
+        $requete = $this->getPdo()->prepare('INSERT INTO ' . self::TABLE . ' VALUES (0,:name,:city, :address)');
+        $requete->bindValue(':name', $opposing_club->getName());
         $requete->bindValue(':city', $opposing_club->getCity());
         $requete->bindValue(':address', $opposing_club->getAdress());
         $requete->execute();

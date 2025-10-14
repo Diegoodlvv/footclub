@@ -6,14 +6,25 @@ namespace App;
 
 final class OpposingClub
 {
-
+    protected string $name;
     protected string $adress;
     protected string $city;
 
-    public function __construct(string $adress, string $city)
+    public function __construct(string $name, string $adress, string $city)
     {
+        $this->name = $name;
         $this->adress = $adress;
         $this->city = $city;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getAdress(): string
