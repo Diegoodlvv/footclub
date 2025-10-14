@@ -2,7 +2,7 @@
 
 namespace public;
 
-require_once '../navBarre.php';
+require_once '../include/navBarre.php';
 
 ?>
 

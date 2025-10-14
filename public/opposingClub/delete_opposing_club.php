@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../head2.php';
+require_once '../../include/head2.php';
 
 use App\RequetesOpposingClub;
 

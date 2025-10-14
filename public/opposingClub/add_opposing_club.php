@@ -1,5 +1,5 @@
 <?php
-require_once '../../head2.php';
+require_once '../../include/head2.php';
 
 
 use App\Error;
@@ -13,7 +13,6 @@ $requete = new RequetesOpposingClub();
 
 $requete2 = new RequetesOpposingClub();
 $opposing_clubs = $requete2->readAll();
-var_dump($opposing_clubs);
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -30,11 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $opposing_club = new OpposingClub($dataArray['name'], $dataArray['address'], $dataArray['city']);
         $requeteVerif = new RequetesOpposingClub();
         if ($requeteVerif->verifyOpposingClub($opposing_club)) {
-            echo "L'équipe adverse a déjà été ajouté auparavant";
-        } else {
             $requete->add($opposing_club);
             echo "l'équipe a été ajouté";
+        } else {
+            echo "L'équipe adverse a déjà été ajouté auparavant";
         }
+        header("Location: add_opposing_club.php");
+        exit;
     }
 }
 ?>

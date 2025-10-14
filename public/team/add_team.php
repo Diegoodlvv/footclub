@@ -1,11 +1,12 @@
 <?php
-require_once '../../head2.php';
+require_once '../../include/head2.php';
 
 
 use App\Error;
 use App\Form;
 use App\Team;
 use App\RequetesTeam;
+use App\Message;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -13,7 +14,6 @@ $requete = new RequetesTeam();
 
 $requete2 = new RequetesTeam();
 $teams = $requete2->readAll();
-
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $data->isEmpty('name');
@@ -27,18 +27,33 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $team = new Team($dataArray['name']);
         $requeteVerif = new RequetesTeam();
         if ($requeteVerif->verifExistanceTeam($team)) {
-            echo "L'équipe a déjà été ajouté auparavant";
+            $_SESSION['message'] = 'false';
         } else {
             $requete->add($team);
-            echo "l'équipe a été ajouté";
+            $_SESSION['message'] = 'true';
         }
+        header("Location: add_team.php");
+        exit;
     }
 }
 ?>
 
 <link rel="stylesheet" href="../styles.css">
 
+
+
 <div class="container">
+
+    <?php if ($_SESSION['message'] == 'true') { ?>
+        <div class="success-message">
+            <?php Message::msgSuccesTeam() ?>
+        </div>
+    <?php } else if ($_SESSION['message'] == 'false') { ?>
+        <div class="error-message">
+            <?php Message::msgErrorTeam() ?>
+        </div>
+    <?php } ?>
+
     <h2>Liste des équipes</h2>
 
     <div class="players-container">
