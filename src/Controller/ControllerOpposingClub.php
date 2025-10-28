@@ -25,8 +25,14 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
-        $opposing_clubs = $requete->fetchAll(\PDO::FETCH_ASSOC);
-        return $opposing_clubs;
+        $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        $clubs = [];
+        foreach ($rows as $row) {
+            $clubs[] = new OpposingClub($row['name'], $row['address'], $row['city']);
+        }
+
+        return $clubs;
     }
 
     public function verifyOpposingClub(OpposingClub $opposing_club): bool

@@ -44,4 +44,14 @@ class Message
     {
         echo "❌ L'équipe adverse existe déjà dans la base de données.";
     }
+
+    public static function msgSuccesMatch(): void
+    {
+        echo "✅ Le match a été ajoutée avec succès !";
+    }
+
+    public static function msgErrorMatch(): void
+    {
+        echo "❌ Le match existe déjà dans la base de données.";
+    }
 }

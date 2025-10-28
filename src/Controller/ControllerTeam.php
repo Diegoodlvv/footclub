@@ -33,13 +33,14 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete->execute();
         $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
 
+        $teams = [];
+
         foreach ($rows as $row) {
             $teams[] = new Team($row['name']);
         }
 
         return $teams;
     }
-
     public function read($id): array
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");

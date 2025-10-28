@@ -27,6 +27,7 @@ $requeteMatch = new ControllerMatch();
 $matchs = $requeteMatch->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    var_dump($_POST);
 
     $data->isEmpty('team_score');
     $data->isEmpty('opponent_score');
@@ -41,28 +42,35 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if ($errors->isFormValid()) {
 
-        $match = new Matchs($dataArray['team_score'], $dataArray['opponent_score'], $dataArray['date'],);
+        $requete1 = new Controllerteam();
+        $requete1->readTeamID($dataArray['team']);
+
+        $requete2 = new ControllerOpposingClub();
+        $requete2->readClubId($dataArray['opponent']);
+
+        $selectedTeam = null;
+        foreach ($teams as $team) {
+            if ($team->getName() === $teamName) {
+                $selectedTeam = $team;
+                break;
+            }
+        }
+
+        $selectedOpponent = null;
+        foreach ($clubs as $club) {
+            if ($club->getName() === $opponentName) {
+                $selectedOpponent = $club;
+                break;
+            }
+        }
+
+
+        $match = new Matchs($dataArray['team_score'], $dataArray['opponent_score'], $dataArray['date'], $selectedTeam, $selectedOpponent->getCity(), $selectedOpponent);
         $requeteVerif = new ControllerMatch();
 
-        $requeteTeam = new ControllerTeam();
-        $team = $requeteTeam->read($dataArray['team']);
-        if ($requeteVerif->verifExistancePlayer($player)) {
-
-            $_SESSION['message_player'] = 'false';
-        } else {
-            $playerId = $requete->add($player);
-            $requetePlayerHasTeam = new ControllerPlayerHasTeam();
-            $playerTeam = [
-                "team_id" => $team['id'],
-                "player_id" => $playerId,
-                "role" => $dataArray['role']
-            ];
-            $requetePlayerHasTeam->add($playerTeam);
-
-            $_SESSION['message_player'] = 'true';
-        }
-        header("Location: add_player.php");
-        exit;
+        $requeteMatch  = new ControllerMatch();
+        $requeteMatch->add($match);
+        $_SESSION['message_match'] = 'true';
     }
 }
 ?>
@@ -71,13 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="container">
 
-    <?php if (isset($_SESSION['message_player']) && $_SESSION['message_player'] == 'true') { ?>
+    <?php if (isset($_SESSION['message_Match']) && $_SESSION['message_Match'] == 'true') { ?>
         <div class="success-message">
-            <?php Message::msgSuccesPlayer() ?>
+            <?php Message::msgSuccesMatch() ?>
         </div>
-    <?php } else if (isset($_SESSION['message_player']) && $_SESSION['message_player']  == 'false') { ?>
+    <?php } else if (isset($_SESSION['message_Match']) && $_SESSION['message_Match']  == 'false') { ?>
         <div class="error-message">
-            <?php Message::msgErrorPlayer() ?>
+            <?php Message::msgErrorMatch() ?>
         </div>
     <?php } ?>
     <?php unset($_SESSION['message_player']) ?>
@@ -139,10 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         <label for="team">Equipe</label>
         <select name="team" class="input-wrap" style="color:  white;">
-            <?php foreach ($teams as $team) {
-                var_dump($team); ?>
-                <option value="<?= $team['id'] ?>">
-                    <?= $team ?>
+            <?php foreach ($teams as $team) { ?>
+                <option value="<?= $team->getTeamName() ?>">
+                    <?= $team->getTeamName() ?>
                 </option>
             <?php } ?>
         </select>
@@ -150,8 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Equipe adverse</label>
         <select name="opponent" class="input-wrap" style="color:  white;">
             <?php foreach ($clubs as $club) { ?>
-                <option value="<?= $club['id'] ?> ">
-                    <?= $club['name'] ?>
+                <option value="<?= $club->getName() ?> ">
+                    <?= $club->getName() ?>
                 </option>
             <?php } ?>
         </select>
