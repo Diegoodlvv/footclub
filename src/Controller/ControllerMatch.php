@@ -7,24 +7,23 @@ use App\Interfaces\InterfaceModel;
 use App\Interfaces\InterfaceRead;
 use App\Model\LoginDatabase;
 use App\Model\Matchs;
+use App\Model\OpposingClub;
+use App\Model\Team;
 
 class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
     const TABLE = "match";
 
 
-    public function bindValueMatch($requete, Matchs $match): void
+    public function bindValueMatch($requete, Matchs $match, $idClub, $idTeam): void
     {
-        $requeteTeam = new ControllerTeam();
-        $idTeam = $requeteTeam->readTeamID($match->getTeam()->GetTeamName());
-
 
         $requete->bindValue(':team_score', $match->getScore());
         $requete->bindValue(':opponent_score', $match->getOpponentScore());
         $requete->bindValue(':date', $match->getDate());
         $requete->bindValue(':team_id', $idTeam);
         $requete->bindValue(':city', $match->getCity());
-        $requete->bindValue(':opposing_club_id', $match->getOpposing_club());
+        $requete->bindValue(':opposing_club_id', $idClub);
     }
 
     public function read($id): array
@@ -38,7 +37,7 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
 
     public function readAll(): array
     {
-        $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
+        $requete = $this->getPdo()->prepare('SELECT * FROM `' . self::TABLE . '`');
         $requete->execute();
         $matchs = $requete->fetchAll(\PDO::FETCH_ASSOC);
         return $matchs;
@@ -46,8 +45,11 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
 
     public function add(InterfaceModel|Matchs $match): int
     {
-        $requete = $this->getPdo()->prepare("INSERT INTO" . self::TABLE . "(team_score, opponent_score, date, team_id, city, opposing_club_id) values (:team_score, :opponent_score, :date, :team_id, :city, :opposing_club_id)");
-        $this->bindValueMatch($requete, $match);
+        $idTeam = $this->getTeamId($match->getTeam());
+        $idClub = $this->getClubId($match->getOpposing_club());
+
+        $requete = $this->getPdo()->prepare("INSERT INTO " . self::TABLE . " (team_score, opponent_score, date, team_id, city, opposing_club_id) values (:team_score, :opponent_score, :date, :team_id, :city, :opposing_club_id)");
+        $this->bindValueMatch($requete, $match, $idClub, $idTeam);
         $requete->execute();
         return $this->getPdo()->lastInsertId();
     }
@@ -72,5 +74,24 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
         // $match->setTeamScore($newDataMatch['team_score']);
 
         // $requete = $this->getPdo()->prepare('UPDATE ' . self::TABLE . ' SET ')
+    }
+
+    public function getTeamId(Team $team): int
+    {
+        $requete = $this->getPdo()->prepare('SELECT id FROM Team WHERE name = :name');
+        $requete->bindValue(':name', $team->GetTeamName());
+        $requete->execute();
+        $idTeam = $requete->fetch(\PDO::FETCH_ASSOC);
+        return $idTeam['id'];
+    }
+
+    public function getClubId(OpposingClub $opposing_club): int
+    {
+        $requete = $this->getPdo()->prepare('SELECT id FROM opposing_club WHERE name= :name AND address = :address AND city = :city');
+        $requete->bindValue(':name', $opposing_club->getName());
+        $requete->bindValue(':address', $opposing_club->getAdress());
+        $requete->bindValue(':city', $opposing_club->getCity());
+        $idClub = $requete->fetch(\PDO::FETCH_ASSOC);
+        return $idClub['id'];
     }
 }

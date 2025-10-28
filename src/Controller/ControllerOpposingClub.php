@@ -62,5 +62,13 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         $requete->execute();
     }
 
+    public function readClubId(string $name): int
+    {
+        $requete = $this->getPdo()->prepare('SELECT id FROM ' . self::TABLE . ' WHERE name = :name');
+        $requete->bindParam(':name', $name);
+        $requete->execute();
+        return $requete->fetch(\PDO::FETCH_ASSOC);
+    }
+
     public function modify(InterfaceModel|OpposingClub $opposing_club, array $newClubData): void {}
 }
