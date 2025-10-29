@@ -69,7 +69,7 @@ final class Matchs
         $this->opponent_score = $opponent_score;
     }
 
-    public function setDate(\DateTime $date): void
+    public function setDate(string $date): void
     {
         $this->date = $date;
     }

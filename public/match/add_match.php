@@ -28,8 +28,8 @@ $matchs = $requeteMatch->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $data->isEmpty('team_score');
-    $data->isEmpty('opponent_score');
+    $data->isNegative('team_score');
+    $data->isNegative('opponent_score');
     $data->isEmpty('date');
     $data->isEmpty('team');
     $data->isEmpty('opponent');

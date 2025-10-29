@@ -49,4 +49,11 @@ final class Form
             $this->errors->addError($champ, "L'addresse mail renseignée n'est pas valide");
         }
     }
+
+    public function isNegative($champ)
+    {
+        if ($champ < 0) {
+            $this->errors->addError($champ, "Le score ne peut pas être négatif");
+        }
+    }
 }
