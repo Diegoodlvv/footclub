@@ -12,7 +12,7 @@ use App\Model\Team;
 
 class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceRead
 {
-    const TABLE = "match";
+    const TABLE = "matchs";
 
 
     public function bindValueMatch($requete, Matchs $match, $idClub, $idTeam): void
@@ -87,11 +87,14 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
 
     public function getClubId(OpposingClub $opposing_club): int
     {
-        $requete = $this->getPdo()->prepare('SELECT id FROM opposing_club WHERE name= :name AND address = :address AND city = :city');
+        var_dump($opposing_club);
+        $requete = $this->getPdo()->prepare('SELECT id FROM opposing_club WHERE name = :name AND address = :address AND city = :city');
         $requete->bindValue(':name', $opposing_club->getName());
         $requete->bindValue(':address', $opposing_club->getAdress());
         $requete->bindValue(':city', $opposing_club->getCity());
+        $requete->execute();
         $idClub = $requete->fetch(\PDO::FETCH_ASSOC);
+        var_dump($idClub);
         return $idClub['id'];
     }
 }

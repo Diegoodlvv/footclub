@@ -47,33 +47,30 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $requete2 = new ControllerOpposingClub();
         $requete2->readClubId($dataArray['opponent']);
 
-        var_dump($dataArray['opponent']);
 
         $selectedTeam = null;
         foreach ($teams as $team) {
-            if ($team->getTeamName() === $dataArray['team']) {
+            if ($team['object']->getTeamName() === $dataArray['team']) {
                 $selectedTeam = $team;
             }
         }
 
         $selectedOpponent = null;
         foreach ($clubs as $club) {
-            var_dump($club->getName());
-            if ($club->getName() === $dataArray['opponent']) {
-                var_dump($club);
+
+            if ($club['object']->getName() === $dataArray['opponent']) {
                 $selectedOpponent = $club;
                 break;
             }
         }
 
-
-        var_dump($selectedOpponent);
-        $match = new Matchs($dataArray['team_score'], $dataArray['opponent_score'], $dataArray['date'], $selectedTeam, $selectedOpponent->getCity(), $selectedOpponent);
+        $match = new Matchs($dataArray['team_score'], $dataArray['opponent_score'], $dataArray['date'], $selectedTeam['object'], $selectedOpponent['object']->getCity(), $selectedOpponent['object']);
         $requeteVerif = new ControllerMatch();
 
         $requeteMatch  = new ControllerMatch();
         $requeteMatch->add($match);
         $_SESSION['message_match'] = 'true';
+        header("Location: add_match.php");
     }
 }
 ?>
@@ -82,16 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="container">
 
-    <?php if (isset($_SESSION['message_Match']) && $_SESSION['message_Match'] == 'true') { ?>
+    <?php if (isset($_SESSION['message_match']) && $_SESSION['message_match'] == 'true') { ?>
         <div class="success-message">
             <?php Message::msgSuccesMatch() ?>
         </div>
-    <?php } else if (isset($_SESSION['message_Match']) && $_SESSION['message_Match']  == 'false') { ?>
+    <?php } else if (isset($_SESSION['message_match']) && $_SESSION['message_match']  == 'false') { ?>
         <div class="error-message">
             <?php Message::msgErrorMatch() ?>
         </div>
     <?php } ?>
-    <?php unset($_SESSION['message_player']) ?>
+    <?php unset($_SESSION['message_match']) ?>
 
     <h2>Liste des matchs</h2>
 
@@ -99,21 +96,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <?php foreach ($matchs as $match) {
 
             $requete = new Controllerteam();
-            $team = $requete->read($match['id']);
+            $team = $requete->read($match['team_id']);
 
             $requete2 = new ControllerOpposingClub();
-            $opposing_club = $requete->read($match['id']);
+            $opposing_club = $requete2->read($match['opposing_club_id']);
 
         ?>
             <div class="player-card">
                 <div class="player-info">
-                    <h3 class="player-name"><?= $team . ' Contre ' . $opposing_club ?></h3>
+                    <h3 class="player-name" style="padding-bottom: 10px;"><?= $team['name'] . ' vs ' . $opposing_club['name'] ?></h3>
                     <p class="player-birthdate">Date du match : <?= $match['date'] ?></p>
-                    <p class="player-birthdate">Lieu du match : <?= $match['city'] . ' , ' . $match['address'] ?></p>
-                    <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_match.php?id=<?= $match['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_match.php?id=<?= $match['id'] ?>">Supprimer</a></button>
-                    </div>
+                    <p class="player-birthdate">Score du match : <?= $match['team_score'] . '-' . $match['opponent_score'] ?></p>
+                    <p class="player-birthdate">Lieu du match : <?= $match['city'] . ' , ' . $opposing_club['address'] ?></p>
                 </div>
             </div>
         <?php } ?>
@@ -127,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="input-wrap">
                 <input id="firstname" name="team_score" type="number" min="0" aria-required="true" />
             </div>
-            <?php $data->getChamp('firstname'); ?>
+            <?php $data->getChamp('team_score'); ?>
         </div>
 
         <div>
@@ -135,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="input-wrap">
                 <input id="lastname" name="opponent_score" type="number" min="0" required aria-required="true" />
             </div>
-            <?php $data->getChamp('lastname'); ?>
+            <?php $data->getChamp('opponent_score'); ?>
         </div>
 
         <div>
@@ -144,15 +138,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <input id="birthdate" name="date" type="date" max="2100-12-31" />
             </div>
             <?php
-            $data->getChamp('birthdate');
+            $data->getChamp('date');
             ?>
         </div>
 
         <label for="team">Equipe</label>
         <select name="team" class="input-wrap" style="color:  white;">
             <?php foreach ($teams as $team) { ?>
-                <option value="<?= $team->getTeamName() ?>">
-                    <?= $team->getTeamName() ?>
+                <option value="<?= $team['object']->getTeamName() ?>">
+                    <?= $team['object']->getTeamName() ?>
                 </option>
             <?php } ?>
         </select>
@@ -160,8 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Equipe adverse</label>
         <select name="opponent" class="input-wrap" style="color:  white;">
             <?php foreach ($clubs as $club) { ?>
-                <option value="<?= $club->getName() ?>">
-                    <?= $club->getName() ?>
+                <option value="<?= $club['object']->getName() ?>">
+                    <?= $club['object']->getName() ?>
                 </option>
             <?php } ?>
         </select>

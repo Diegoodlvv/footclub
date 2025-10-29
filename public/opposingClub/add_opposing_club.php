@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $dataArray = $data->getData();
 
     if ($errors->isFormValid()) {
-        $opposing_club = new OpposingClub($dataArray['name'], $dataArray['address'], $dataArray['city']);
+        $opposing_club = new OpposingClub($dataArray['name'], $dataArray['city'], $dataArray['address']);
         $requeteVerif = new ControllerOpposingClub();
         if ($requeteVerif->verifyOpposingClub($opposing_club)) {
             $requete->add($opposing_club);
@@ -68,9 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div class="player-card">
 
                     <div class="player-info">
-                        <h3 class="player-name" style="padding-bottom: 10px;"><?= $opposing_club['name'] ?></h3>
-                        <p class="player-birthdate">Adresse : <?= $opposing_club['address'] ?></p>
-                        <p class="player-birthdate">Ville : <?= $opposing_club['city'] ?></p>
+                        <h3 class="player-name" style="padding-bottom: 10px;"><?= $opposing_club['object']->getName() ?></h3>
+                        <p class="player-birthdate">Adresse : <?= $opposing_club['object']->getAdress() ?></p>
+                        <p class="player-birthdate">Ville : <?= $opposing_club['object']->getCity() ?></p>
                         <div class="player-actions">
                             <button class="btn-edit"><a href="modify_opposing_club.php?id=<?= $opposing_club['id'] ?>">Modifier</a></button>
                             <button class="btn-delete"><a href="delete_opposing_club.php?id=<?= $opposing_club['id'] ?>">Supprimer</a></button>

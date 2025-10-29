@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="player-card">
 
                 <div class="player-info">
-                    <h3 class="player-name" style="padding-bottom: 15px;"><?= $team['name'] ?></h3>
+                    <h3 class="player-name" style="padding-bottom: 15px;"><?= $team['object']->getTeamName() ?></h3>
                     <div class="player-actions">
                         <button class="btn-edit"><a href="modify_team.php?id=<?= $team['id'] ?>">Modifier</a></button>
                         <button class="btn-delete"><a href="delete_team.php?id=<?= $team['id'] ?>">Supprimer</a></button>

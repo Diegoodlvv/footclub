@@ -9,12 +9,12 @@ final class Matchs
 
     private int $team_score;
     private int $opponent_score;
-    private \DateTime $date;
+    private string $date;
     private Team $team;
     private string $city;
     private OpposingClub $opposing_club;
 
-    public function __construct(int $team_score, int $opponent_score, \DateTime $date, Team $team, string $city, OpposingClub $opposing_club)
+    public function __construct(int $team_score, int $opponent_score, string $date, Team $team, string $city, OpposingClub $opposing_club)
     {
         $this->team_score = $team_score;
         $this->opponent_score = $opponent_score;
@@ -34,7 +34,7 @@ final class Matchs
         return $this->opponent_score;
     }
 
-    public function getDate(): \DateTime
+    public function getDate(): string
     {
         return $this->date;
     }

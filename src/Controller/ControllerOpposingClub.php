@@ -29,7 +29,10 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
 
         $clubs = [];
         foreach ($rows as $row) {
-            $clubs[] = new OpposingClub($row['name'], $row['address'], $row['city']);
+            $clubs[] = [
+                'id' => $row['id'],
+                'object' => new OpposingClub($row['name'], $row['address'], $row['city'])
+            ];
         }
 
         return $clubs;

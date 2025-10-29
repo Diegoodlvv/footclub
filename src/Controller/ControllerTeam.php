@@ -36,7 +36,10 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $teams = [];
 
         foreach ($rows as $row) {
-            $teams[] = new Team($row['name']);
+            $teams[] = [
+                'id' => $row['id'],
+                'object' => new Team($row['name'])
+            ];
         }
 
         return $teams;
