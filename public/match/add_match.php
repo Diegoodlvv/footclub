@@ -27,7 +27,6 @@ $requeteMatch = new ControllerMatch();
 $matchs = $requeteMatch->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    var_dump($_POST);
 
     $data->isEmpty('team_score');
     $data->isEmpty('opponent_score');
@@ -48,23 +47,27 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $requete2 = new ControllerOpposingClub();
         $requete2->readClubId($dataArray['opponent']);
 
+        var_dump($dataArray['opponent']);
+
         $selectedTeam = null;
         foreach ($teams as $team) {
-            if ($team->getName() === $teamName) {
+            if ($team->getTeamName() === $dataArray['team']) {
                 $selectedTeam = $team;
-                break;
             }
         }
 
         $selectedOpponent = null;
         foreach ($clubs as $club) {
-            if ($club->getName() === $opponentName) {
+            var_dump($club->getName());
+            if ($club->getName() === $dataArray['opponent']) {
+                var_dump($club);
                 $selectedOpponent = $club;
                 break;
             }
         }
 
 
+        var_dump($selectedOpponent);
         $match = new Matchs($dataArray['team_score'], $dataArray['opponent_score'], $dataArray['date'], $selectedTeam, $selectedOpponent->getCity(), $selectedOpponent);
         $requeteVerif = new ControllerMatch();
 
@@ -157,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Equipe adverse</label>
         <select name="opponent" class="input-wrap" style="color:  white;">
             <?php foreach ($clubs as $club) { ?>
-                <option value="<?= $club->getName() ?> ">
+                <option value="<?= $club->getName() ?>">
                     <?= $club->getName() ?>
                 </option>
             <?php } ?>
