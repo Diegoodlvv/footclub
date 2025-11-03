@@ -61,6 +61,7 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         $requete->bindValue(':city', $opposing_club->getCity());
         $requete->bindValue(':address', $opposing_club->getAdress());
         $requete->execute();
+
         return $this->getPdo()->lastInsertId();
     }
 
@@ -77,6 +78,7 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         $requete->bindParam(':name', $name);
         $requete->execute();
         $id = $requete->fetch(\PDO::FETCH_ASSOC);
+
         return $id['id'];
     }
 

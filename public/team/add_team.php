@@ -51,9 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <?php } else if (isset($_SESSION['message_team']) && $_SESSION['message_team']  == 'false') { ?>
         <div class="error-message">
             <?php Message::msgErrorTeam() ?>
-            <?php unset($_SESSION['message_team']) ?>
         </div>
     <?php } ?>
+    <?php unset($_SESSION['message_team']) ?>
 
     <h2>Liste des équipes</h2>
 

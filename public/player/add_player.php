@@ -39,16 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $player = new Player($dataArray['firstname'], $dataArray['lastname'], $dataArray['birthdate'], $dataArray['picture']);
         $requeteVerif = new ControllerPlayer();
 
-        $requeteTeam = new ControllerTeam();
-        $team = $requeteTeam->read($dataArray['team']);
         if ($requeteVerif->verifExistancePlayer($player)) {
 
             $_SESSION['message_player'] = 'false';
         } else {
             $playerId = $requete->add($player);
             $requetePlayerHasTeam = new ControllerPlayerHasTeam();
+            $requeteTeam = new ControllerTeam();
+            $id = $requeteTeam->readTeamID($dataArray['team']);
             $playerTeam = [
-                "team_id" => $team['id'],
+                "team_id" => $id,
                 "player_id" => $playerId,
                 "role" => $dataArray['role']
             ];
@@ -137,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Equipe</label>
         <select name="team" class="input-wrap" style="color:  white;">
             <?php foreach ($teams as $team) { ?>
-                <option value="<?= $team['id'] ?>">
-                    <?= $team['name'] ?>
+                <option value="<?= $team['object']->getTeamName() ?>">
+                    <?= $team['object']->getTeamName() ?>
                 </option>
             <?php } ?>
         </select>

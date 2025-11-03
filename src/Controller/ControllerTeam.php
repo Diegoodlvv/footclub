@@ -86,6 +86,7 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
     {
         $requete = $this->getPdo()->prepare('SELECT id FROM ' . self::TABLE . ' WHERE name = :name');
         $requete->bindParam(':name', $name);
+        $requete->execute();
         $id = $requete->fetch(\PDO::FETCH_ASSOC);
         return $id;
     }

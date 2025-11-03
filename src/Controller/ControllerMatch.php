@@ -82,6 +82,7 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->bindValue(':name', $team->GetTeamName());
         $requete->execute();
         $idTeam = $requete->fetch(\PDO::FETCH_ASSOC);
+
         return $idTeam['id'];
     }
 
@@ -95,6 +96,7 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->execute();
         $idClub = $requete->fetch(\PDO::FETCH_ASSOC);
         var_dump($idClub);
+
         return $idClub['id'];
     }
 }
