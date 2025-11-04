@@ -45,13 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         } else {
             $playerId = $requete->add($player);
             $requetePlayerHasTeam = new ControllerPlayerHasTeam();
-            $requeteTeam = new ControllerTeam();
-            $id = $requeteTeam->readTeamID($dataArray['team']);
-            $playerTeam = [
-                "team_id" => $id,
-                "player_id" => $playerId,
-                "role" => $dataArray['role']
-            ];
             $requetePlayerHasTeam->add($playerTeam);
 
             $_SESSION['message_player'] = 'true';
@@ -79,21 +72,66 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     <h2>Liste des joueurs</h2>
 
-    <div class="players-container">
+    <div class="players-grid">
         <?php foreach ($players as $player) { ?>
-            <div class="player-card">
-                <img src="../../img/<?php echo $player['picture'] ?>" alt="Photo du joueur" class="player-photo">
-                <div class="player-info">
-                    <h3 class="player-name"><?= $player['firstname'] . ' ' . $player['lastname'] ?></h3>
-                    <p class="player-birthdate">Née le : <?= $player['birthdate'] ?></p>
-                    <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_player.php?id=<?= $player['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_player.php?id=<?= $player['id'] ?>">Supprimer</a></button>
+            <div class="player-card-modern">
+                <div class="player-header">
+                    <img src="../../img/<?= htmlspecialchars($player->getPicture()) ?>" alt="Photo du joueur" class="player-img">
+                    <div class="player-basic-info">
+                        <h3><?= htmlspecialchars($player->getFirstName() . ' ' . $player->getLastName()) ?></h3>
+                        <p class="player-date">Né(e) le <?= htmlspecialchars($player->getBirthdate()) ?></p>
                     </div>
                 </div>
+
+                <div class="player-teams">
+                    <h4>Clubs & postes</h4>
+                    <?php
+                    $requete = new ControllerPlayerHasTeam();
+                    $playersHasTeams = $requete->getTeams($player);
+                    if (!empty($playersHasTeams)) { ?>
+                        <ul>
+                            <?php foreach ($playersHasTeams as $playerHasTeam) { ?>
+                                <li>
+                                    <span class="team-name"><?= htmlspecialchars($playerHasTeam->getTeam()->getTeamName()) ?></span>
+                                    <span class="team-role">— <?= htmlspecialchars($playerHasTeam->getRole()->name) ?></span>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    <?php } else { ?>
+                        <p class="no-team">Aucun club renseigné</p>
+                    <?php } ?>
+                </div>
+
+                <div class="player-actions">
+                    <a href="modify_player.php?id=<?= (int)$player->getId() ?>" class="btn btn-edit">Modifier</a>
+                    <a href="delete_player.php?id=<?= (int)$player->getId() ?>" class="btn btn-delete">Supprimer</a>
+                </div>
+
+                <form method="post" action="add_player_to_team.php" class="add-team-form">
+                    <input type="hidden" name="player_id" value="<?= (int)$player->getId() ?>">
+
+                    <label>Équipe</label>
+                    <select name="team_id">
+                        <?php foreach ($teams as $team) { ?>
+                            <option value="<?= (int)$team->getId() ?>"><?= htmlspecialchars($team->getTeamName()) ?></option>
+                        <?php } ?>
+                    </select>
+
+                    <label>Poste</label>
+                    <select name="role">
+                        <?php foreach (EnumRolePlayer::cases() as $role) { ?>
+                            <option value="<?= $role->value ?>"><?= $role->name ?></option>
+                        <?php } ?>
+                    </select>
+
+                    <button type="submit" class="btn btn-add">Ajouter</button>
+                </form>
             </div>
         <?php } ?>
     </div>
+
+
+
 
     <h2 style="margin-top: 120px;">Ajouter un nouveau joueur</h2>
 
@@ -137,8 +175,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <label for="team">Equipe</label>
         <select name="team" class="input-wrap" style="color:  white;">
             <?php foreach ($teams as $team) { ?>
-                <option value="<?= $team['object']->getTeamName() ?>">
-                    <?= $team['object']->getTeamName() ?>
+                <option value="<?= $team->getTeamName() ?>">
+                    <?= $team->getTeamName() ?>
                 </option>
             <?php } ?>
         </select>

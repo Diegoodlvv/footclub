@@ -33,12 +33,12 @@ class PlayerHasTeam
         $this->player = $newPlayer;
     }
 
-    public function getRolePlayerInTeam(): EnumRolePlayer
+    public function getRole(): EnumRolePlayer
     {
         return $this->role;
     }
 
-    public function setRolePlayerInTeam(EnumRolePlayer $newRole): void
+    public function setRole(EnumRolePlayer $newRole): void
     {
         $this->role = $newRole;
     }

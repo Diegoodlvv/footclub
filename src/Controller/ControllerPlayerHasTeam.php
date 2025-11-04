@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
-
+use App\Enum\EnumRolePlayer;
 use App\Interfaces\InterfaceRead;
+use App\Interfaces\InterfaceModel;
 use App\Model\LoginDatabase;
+use App\Model\Player;
+use App\Model\PlayerHasTeam;
+use App\Model\Team;
 
 class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 {
@@ -39,5 +43,37 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
         $requete = $this->getPdo()->prepare('INSERT INTO ' .  self::TABLE . ' (player_id, team_id, role) values (:player_id, :team_id, :role) ');
         $this->bindValuePlayerHasTeam($requete, $playerTeam);
         $requete->execute();
+    }
+
+    public function getTeams(InterfaceModel|Player $player): array
+    {
+        $stmt = $this->getPdo()->prepare("
+            SELECT * FROM " . self::TABLE . " WHERE player_id = :player_id
+        ");
+        $stmt->bindValue(':player_id', $player->getId(), \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $playersHasteams = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+
+        foreach ($playersHasteams as $playerHasTeam) {
+            $requete = new ControllerPlayer();
+
+            $player = $requete->read($playerHasTeam['player_id']);
+
+            $requete2 = new ControllerTeam();
+
+            $team = $requete2->read($playerHasTeam['team_id']);
+
+            $role = EnumRolePlayer::from($playerHasTeam['role']);
+
+            $playerTeams[] = new PlayerHasTeam(
+                $team,
+                $player,
+                $role
+            );
+        }
+
+        return $playerTeams;
     }
 }
