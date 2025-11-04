@@ -6,5 +6,5 @@ interface InterfaceRead
 {
     public function readAll(): array|false;
 
-    public function read($id): array;
+    public function read($id);
 }

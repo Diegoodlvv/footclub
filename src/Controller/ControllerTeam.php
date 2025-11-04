@@ -19,12 +19,13 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete->bindValue(':name', $team->GetTeamName());
         $requete->execute();
         $idTeam = $this->getPdo()->lastInsertId();
+
         return $idTeam;
     }
 
     public function redirection(): void
     {
-        header("Location: ../");
+        header("Location: add_team.php");
     }
 
     public function readAll(): array
@@ -33,23 +34,21 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete->execute();
         $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
 
-        $teams = [];
-
         foreach ($rows as $row) {
-            $teams[] = [
-                'id' => $row['id'],
-                'object' => new Team($row['name'])
-            ];
+            $teams[] = Team::arrayToTeam($row);
         }
 
         return $teams;
     }
-    public function read($id): array
+    public function read($id): InterfaceModel|Team
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");
-        $requete->bindParam(':id', $id);
+        $requete->bindValue(':id', $id);
         $requete->execute();
         $team = $requete->fetch(\PDO::FETCH_ASSOC);
+
+        $team = Team::arrayToTeam($team);
+
         return $team;
     }
 
@@ -66,10 +65,10 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         }
     }
 
-    public function delete($id): void
+    public function delete(InterfaceModel|Team $team): void
     {
         $requete = $this->getPdo()->prepare('DELETE FROM ' . self::TABLE . ' WHERE id = :id');
-        $requete->bindValue(':id', $id);
+        $requete->bindValue(':id', $team->getId());
         $requete->execute();
         header("Location: add_team.php");
     }
@@ -80,14 +79,5 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         $requete = $this->getPdo()->prepare('UPDATE ' . self::TABLE . ' SET name = :name');
         $requete->bindValue(':name', $newTeamData['name']);
         $requete->execute();
-    }
-
-    public function readTeamID(string $name): int
-    {
-        $requete = $this->getPdo()->prepare('SELECT id FROM ' . self::TABLE . ' WHERE name = :name');
-        $requete->bindParam(':name', $name);
-        $requete->execute();
-        $id = $requete->fetch(\PDO::FETCH_ASSOC);
-        return $id;
     }
 }

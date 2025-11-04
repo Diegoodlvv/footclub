@@ -6,15 +6,22 @@ namespace App\Model;
 
 final class OpposingClub
 {
-    protected string $name;
-    protected string $adress;
-    protected string $city;
 
-    public function __construct(string $name, string $adress, string $city)
+    public function __construct(
+        protected string $name,
+        protected string $adress,
+        protected string $city,
+        protected ?int $id = null
+    ) {}
+
+    public function getId(): int
     {
-        $this->name = $name;
-        $this->adress = $adress;
-        $this->city = $city;
+        return $this->id;
+    }
+
+    public function setId(int $newId): void
+    {
+        $this->id = $newId;
     }
 
     public function getName(): string

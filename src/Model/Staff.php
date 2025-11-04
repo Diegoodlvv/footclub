@@ -6,17 +6,22 @@ use App\Enum\EnumRoleStaff;
 
 final class Staff
 {
-    protected string $firstname;
-    protected string $lastname;
-    protected string $picture;
-    protected EnumRoleStaff $role;
+    public function __construct(
+        protected string $firstname,
+        protected string $lastname,
+        protected string $picture,
+        protected EnumRoleStaff $role,
+        protected ?int $id = null
+    ) {}
 
-    public function __construct(string $firstname, string $lastname, string $picture, EnumRoleStaff $role)
+    public function getId(): int
     {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->picture = $picture;
-        $this->role = $role;
+        return $this->id;
+    }
+
+    public function setId(int $newId): void
+    {
+        $this->id = $newId;
     }
 
     public function getFirstname(): string
@@ -65,7 +70,8 @@ final class Staff
             $data['firstname'],
             $data['lastname'],
             $data['picture'],
-            $data['role']
+            $data['role'],
+            $data['id']
         );
 
         return $staff_member;

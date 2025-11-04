@@ -7,5 +7,5 @@ interface InterfaceCrud
 {
     public function add(InterfaceModel $model): int;
     public function modify(InterfaceModel $model, array $newData): void;
-    public function delete($id): void;
+    public function delete(InterfaceModel $model): void;
 }

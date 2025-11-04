@@ -40,13 +40,14 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         $this->bindValueStaff($requete, $staff_member);
         $requete->execute();
         $StaffId = $this->getPdo()->lastInsertId();
+
         return $StaffId;
     }
 
-    public function delete($id): void
+    public function delete(InterfaceModel|Staff $staff_member): void
     {
         $requete = $this->getPdo()->prepare('DELETE FROM ' . self::TABLE . ' WHERE id = :id');
-        $requete->bindValue(':id', $id);
+        $requete->bindValue(':id', $staff_member->getId());
         $requete->execute();
     }
 
@@ -60,12 +61,16 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->bindValue(':lastname', $newStaffData['lastname']);
     }
 
-    public function read($id): array
+    public function read($id): InterfaceModel|Staff
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM  ' . self::TABLE . ' WHERE id = :id');
         $requete->bindValue(':id', $id);
         $requete->execute();
-        return $requete->fetch(\PDO::FETCH_ASSOC);
+        $staff_member =  $requete->fetch(\PDO::FETCH_ASSOC);
+
+        $staff_member = Staff::arrayToStaff($staff_member);
+
+        return $staff_member;
     }
 
     public function readAll(): array

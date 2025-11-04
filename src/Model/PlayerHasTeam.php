@@ -2,28 +2,16 @@
 
 namespace App\Model;
 
-
+use App\Enum\EnumRolePlayer;
 
 class PlayerHasTeam
 {
-    public array $roles = [
-        "Attaquant",
-        "Milieu",
-        "Defenseur",
-        "Gardien"
-    ];
-    public string $role;
-    public Team $team;
-    public Player $player;
 
-
-
-    public function __construct(Team $team, Player $player, string $role)
-    {
-        $this->team = $team;
-        $this->player = $player;
-        $this->role = $role;
-    }
+    public function __construct(
+        protected Team $team,
+        protected Player $player,
+        protected EnumRolePlayer $role
+    ) {}
 
     public function getTeam(): Team
     {
@@ -35,11 +23,23 @@ class PlayerHasTeam
         $this->team = $newTeam;
     }
 
-    public function verifRole(): void
+    public function getPlayer(): Player
     {
+        return $this->player;
+    }
 
-        if (!in_array($this->role, $this->roles)) {
-            echo "Ce role n'existe pas";
-        }
+    public function setPlayer(Player $newPlayer): void
+    {
+        $this->player = $newPlayer;
+    }
+
+    public function getRolePlayerInTeam(): EnumRolePlayer
+    {
+        return $this->role;
+    }
+
+    public function setRolePlayerInTeam(EnumRolePlayer $newRole): void
+    {
+        $this->role = $newRole;
     }
 }

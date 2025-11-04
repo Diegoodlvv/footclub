@@ -5,11 +5,21 @@ namespace App\Model;
 
 final class Team
 {
-    private string $name;
 
-    public function __construct(string $name)
+
+    public function __construct(
+        private string $name,
+        private ?int $id = null
+    ) {}
+
+    public function getId(): int
     {
-        $this->name = $name;
+        return $this->id;
+    }
+
+    public function setId(int $newId): void
+    {
+        $this->id = $newId;
     }
 
     public function GetTeamName(): string
@@ -22,10 +32,11 @@ final class Team
         $this->name = $newName;
     }
 
-    public static function arrayToTeam(array $dataTeam): Team
+    public static function arrayToTeam(array $data): Team
     {
         return new Team(
-            $dataTeam['name']
+            $data['name'],
+            $data['id']
         );
     }
 }

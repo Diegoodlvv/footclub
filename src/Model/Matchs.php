@@ -7,21 +7,26 @@ use App\Model\Team;
 final class Matchs
 {
 
-    private int $team_score;
-    private int $opponent_score;
-    private string $date;
-    private Team $team;
-    private string $city;
-    private OpposingClub $opposing_club;
 
-    public function __construct(int $team_score, int $opponent_score, string $date, Team $team, string $city, OpposingClub $opposing_club)
+
+    public function __construct(
+        protected int $team_score,
+        protected int $opponent_score,
+        protected string $date,
+        protected Team $team,
+        protected string $city,
+        protected OpposingClub $opposing_club,
+        protected ?int $id = null
+    ) {}
+
+    public function getId(): int
     {
-        $this->team_score = $team_score;
-        $this->opponent_score = $opponent_score;
-        $this->date = $date;
-        $this->team = $team;
-        $this->city = $city;
-        $this->opposing_club = $opposing_club;
+        return $this->id;
+    }
+
+    public function setId(int $newId): void
+    {
+        $this->id = $newId;
     }
 
     public function getScore(): int

@@ -7,6 +7,10 @@ use App\RequetesTeam;
 
 $id = $_GET['id'];
 $requete = new ControllerTeam();
+$team = $requete->read($id);
 
-$requete->delete($id);
-header("Location: add_team.php");
+$requete2 = new ControllerTeam();
+$requete2->delete($team);
+
+$requete3 = new ControllerTeam();
+$requete3->redirection();

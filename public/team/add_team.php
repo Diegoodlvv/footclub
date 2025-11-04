@@ -14,6 +14,7 @@ $requete = new ControllerTeam();
 
 $requete2 = new ControllerTeam();
 $teams = $requete2->readAll();
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $data->isEmpty('name');
@@ -24,15 +25,20 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $dataArray = $data->getData();
 
     if ($errors->isFormValid()) {
+
         $team = new Team($dataArray['name']);
         $requeteVerif = new ControllerTeam();
+
         if ($requeteVerif->verifExistanceTeam($team)) {
             $_SESSION['message_team'] = 'false';
         } else {
+
             $requete->add($team);
+
             $_SESSION['message_team'] = 'true';
         }
         header("Location: add_team.php");
+
         exit;
     }
 }
@@ -62,10 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="player-card">
 
                 <div class="player-info">
-                    <h3 class="player-name" style="padding-bottom: 15px;"><?= $team['object']->getTeamName() ?></h3>
+                    <h3 class="player-name" style="padding-bottom: 15px;"><?= $team->GetTeamName() ?></h3>
                     <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_team.php?id=<?= $team['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_team.php?id=<?= $team['id'] ?>">Supprimer</a></button>
+                        <button class="btn-edit"><a href="modify_team.php?id=<?= $team->getId() ?>">Modifier</a></button>
+                        <button class="btn-delete"><a href="delete_team.php?id=<?= $team->getId() ?>">Supprimer</a></button>
                     </div>
                 </div>
             </div>

@@ -4,17 +4,24 @@ namespace App\Model;
 
 final class Player
 {
-    protected string $firstname;
-    protected string $lastname;
-    protected string $birthdate;
-    protected string $picture;
 
-    public function __construct(string $firstname, string $lastname, string $birthdate, string $picture)
+
+    public function __construct(
+        protected string $firstname,
+        protected string $lastname,
+        protected string $birthdate,
+        protected string $picture,
+        protected ?int $id = null
+    ) {}
+
+    public function getId(): int
     {
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->birthdate = $birthdate;
-        $this->picture = $picture;
+        return $this->id;
+    }
+
+    public function setId(int $newId): void
+    {
+        $this->id = $newId;
     }
 
     public function getFirstName(): string
