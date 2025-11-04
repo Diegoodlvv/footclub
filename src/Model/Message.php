@@ -54,4 +54,14 @@ class Message
     {
         echo "❌ Le match existe déjà dans la base de données.";
     }
+
+    public static function msgErrorPlayerTeam(): void
+    {
+        echo "❌ Le joueur à déjà ce rôle dans cette équipe";
+    }
+
+    public static function msgSuccesPlayerTeam(): void
+    {
+        echo "✅ Le joueur a été ajoutée avec succès dans l'équipe choisi !";
+    }
 }

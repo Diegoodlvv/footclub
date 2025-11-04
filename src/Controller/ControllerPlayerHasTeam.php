@@ -31,21 +31,21 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
         return $playersTeam;
     }
 
-    public function bindValuePlayerHasTeam($requete, array $playerTeam)
+    public function bindValuePlayerHasTeam($requete, InterfaceModel|PlayerHasTeam $playerHasTeam)
     {
-        $requete->bindValue(':player_id', $playerTeam['player_id']);
-        $requete->bindValue(':team_id', $playerTeam['team_id']);
-        $requete->bindValue(':role', $playerTeam['role']);
+        $requete->bindValue(':player_id', $playerHasTeam->getPlayer()->getId());
+        $requete->bindValue(':team_id', $playerHasTeam->getTeam()->getId());
+        $requete->bindValue(':role', $playerHasTeam->getRole()->value);
     }
 
-    public function add(array $playerTeam): void
+    public function add(InterfaceModel|PlayerHasTeam $playerHasTeam): void
     {
         $requete = $this->getPdo()->prepare('INSERT INTO ' .  self::TABLE . ' (player_id, team_id, role) values (:player_id, :team_id, :role) ');
-        $this->bindValuePlayerHasTeam($requete, $playerTeam);
+        $this->bindValuePlayerHasTeam($requete, $playerHasTeam);
         $requete->execute();
     }
 
-    public function getTeams(InterfaceModel|Player $player): array
+    public function getTeams(InterfaceModel|Player $player): ?array
     {
         $stmt = $this->getPdo()->prepare("
             SELECT * FROM " . self::TABLE . " WHERE player_id = :player_id
@@ -74,6 +74,24 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
             );
         }
 
-        return $playerTeams;
+        if (!empty($playerTeams)) {
+            return $playerTeams;
+        } else {
+            return null;
+        }
+    }
+
+    public function verifyPlayerTeamRole(InterfaceModel|PlayerHasTeam $playerHasTeam): bool
+    {
+        $requete = $this->getPdo()->prepare("SELECT * FROM " . self::TABLE . " WHERE player_id = :player_id AND team_id = :team_id AND role = :role");
+        $this->bindValuePlayerHasTeam($requete, $playerHasTeam);
+        $requete->execute();
+        $bool = $requete->fetch(\PDO::FETCH_ASSOC);
+
+        if ($bool == false) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

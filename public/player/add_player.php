@@ -10,6 +10,7 @@ use App\Controller\ControllerTeam;
 use App\Enum\EnumRolePlayer;
 use App\Controller\ControllerPlayerHasTeam;
 use App\Model\Message;
+use App\Model\PlayerHasTeam;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -23,34 +24,76 @@ $teams = $requeteTeams->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $data->isEmpty('firstname');
-    $data->isEmpty('lastname');
-    $data->isEmpty('birthdate');
-    $data->isEmpty('picture');
-    $data->isEmpty('team');
-    $data->isEmpty('role');
+    // 🟩 Formulaire d'ajout d'un joueur dans une équipe
+    if (isset($_POST['Role']) && isset($_POST['Team']) && isset($_POST['player_id'])) {
+        $data->isEmpty('Role');
+        $data->isEmpty('Team');
 
-    $data->trimData();
-    $data->specialcharsData();
+        $data->trimData();
+        $data->specialcharsData();
+        $dataArray = $data->getData();
 
-    $dataArray = $data->getData();
+        if ($errors->isFormValid()) {
+            $playerId = $_POST['player_id'];
+            $teamId = $dataArray['Team'];
+            $role = EnumRolePlayer::from($dataArray['Role']);
 
-    if ($errors->isFormValid()) {
-        $player = new Player($dataArray['firstname'], $dataArray['lastname'], $dataArray['birthdate'], $dataArray['picture']);
-        $requeteVerif = new ControllerPlayer();
+            $player = (new ControllerPlayer())->read($playerId);
+            $team = (new ControllerTeam())->read($teamId);
 
-        if ($requeteVerif->verifExistancePlayer($player)) {
+            if ($player && $team) {
+                $playerHasTeam = new PlayerHasTeam($team, $player, $role);
 
-            $_SESSION['message_player'] = 'false';
-        } else {
-            $playerId = $requete->add($player);
-            $requetePlayerHasTeam = new ControllerPlayerHasTeam();
-            $requetePlayerHasTeam->add($playerTeam);
+                if (new ControllerPlayerHasTeam()->verifyPlayerTeamRole($playerHasTeam) == true) {
 
-            $_SESSION['message_player'] = 'true';
+                    $controllerPHT = new ControllerPlayerHasTeam();
+                    $controllerPHT->add($playerHasTeam);
+
+                    $_SESSION['message_playerTeam'] = 'true';
+                } else {
+
+                    $_SESSION['message_playerTeam'] = 'false';
+                }
+            } else {
+                echo "L'équipe ou le joueur n'éxiste pas";
+            }
+
+            header("Location: add_player.php");
+            exit;
         }
-        header("Location: add_player.php");
-        exit;
+    }
+
+    //  Formulaire de création d’un joueur
+
+    elseif (isset($_POST['firstname'])) {
+        $data->isEmpty('firstname');
+        $data->isEmpty('lastname');
+        $data->isEmpty('birthdate');
+        $data->isEmpty('picture');
+
+        $data->trimData();
+        $data->specialcharsData();
+        $dataArray = $data->getData();
+
+        if ($errors->isFormValid()) {
+            $player = new Player(
+                $dataArray['firstname'],
+                $dataArray['lastname'],
+                $dataArray['birthdate'],
+                $dataArray['picture']
+            );
+
+            $controllerPlayer = new ControllerPlayer();
+            if ($controllerPlayer->verifExistancePlayer($player)) {
+                $_SESSION['message_player'] = 'false';
+            } else {
+                $controllerPlayer->add($player);
+                $_SESSION['message_player'] = 'true';
+            }
+
+            header("Location: add_player.php");
+            exit;
+        }
     }
 }
 ?>
@@ -67,8 +110,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <div class="error-message">
             <?php Message::msgErrorPlayer() ?>
         </div>
-    <?php } ?>
-    <?php unset($_SESSION['message_player']) ?>
+    <?php } else if (isset($_SESSION['message_playerTeam']) && $_SESSION['message_playerTeam'] == 'false') { ?>
+        <div class="error-message">
+            <?php Message::msgErrorPlayerTeam() ?>
+        </div>
+    <?php } else if (isset($_SESSION['message_playerTeam']) && $_SESSION['message_playerTeam'] == 'true') { ?>
+        <div class="success-message">
+            <?php Message::msgSuccesPlayerTeam() ?>
+        </div>
+    <?php }
+    unset($_SESSION['message_player'], $_SESSION['message_playerTeam']) ?>
 
     <h2>Liste des joueurs</h2>
 
@@ -76,10 +127,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         <?php foreach ($players as $player) { ?>
             <div class="player-card-modern">
                 <div class="player-header">
-                    <img src="../../img/<?= htmlspecialchars($player->getPicture()) ?>" alt="Photo du joueur" class="player-img">
+                    <img src="../../img/<?= ($player->getPicture()) ?>" alt="Photo du joueur" class="player-img">
                     <div class="player-basic-info">
-                        <h3><?= htmlspecialchars($player->getFirstName() . ' ' . $player->getLastName()) ?></h3>
-                        <p class="player-date">Né(e) le <?= htmlspecialchars($player->getBirthdate()) ?></p>
+                        <h3><?= ($player->getFirstName() . ' ' . $player->getLastName()) ?></h3>
+                        <p class="player-date">Né(e) le <?= ($player->getBirthdate()) ?></p>
                     </div>
                 </div>
 
@@ -92,8 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <ul>
                             <?php foreach ($playersHasTeams as $playerHasTeam) { ?>
                                 <li>
-                                    <span class="team-name"><?= htmlspecialchars($playerHasTeam->getTeam()->getTeamName()) ?></span>
-                                    <span class="team-role">— <?= htmlspecialchars($playerHasTeam->getRole()->name) ?></span>
+                                    <span class="team-name"><?= ($playerHasTeam->getTeam()->getTeamName()) ?></span>
+                                    <span class="team-role">— <?= ($playerHasTeam->getRole()->name) ?></span>
                                 </li>
                             <?php } ?>
                         </ul>
@@ -107,24 +158,24 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <a href="delete_player.php?id=<?= (int)$player->getId() ?>" class="btn btn-delete">Supprimer</a>
                 </div>
 
-                <form method="post" action="add_player_to_team.php" class="add-team-form">
+                <form method="post" class="add-team-form">
                     <input type="hidden" name="player_id" value="<?= (int)$player->getId() ?>">
 
                     <label>Équipe</label>
-                    <select name="team_id">
+                    <select name="Team">
                         <?php foreach ($teams as $team) { ?>
-                            <option value="<?= (int)$team->getId() ?>"><?= htmlspecialchars($team->getTeamName()) ?></option>
+                            <option value="<?= (int)$team->getId() ?>"><?= ($team->getTeamName()) ?></option>
                         <?php } ?>
                     </select>
 
                     <label>Poste</label>
-                    <select name="role">
+                    <select name="Role">
                         <?php foreach (EnumRolePlayer::cases() as $role) { ?>
                             <option value="<?= $role->value ?>"><?= $role->name ?></option>
                         <?php } ?>
                     </select>
 
-                    <button type="submit" class="btn btn-add">Ajouter</button>
+                    <input type="submit" class="btn btn-add" value="Ajouter">
                 </form>
             </div>
         <?php } ?>
@@ -171,25 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div id="pictureHint" class="hint">Taille max recommandée : 5 MB — carré de préférence.</div>
             </div> <?php $data->getChamp('picture'); ?>
         </div>
-
-        <label for="team">Equipe</label>
-        <select name="team" class="input-wrap" style="color:  white;">
-            <?php foreach ($teams as $team) { ?>
-                <option value="<?= $team->getTeamName() ?>">
-                    <?= $team->getTeamName() ?>
-                </option>
-            <?php } ?>
-        </select>
-
-        <label for="team">Rôle dans l'équipe</label>
-        <select name="role" class="input-wrap" style="color:  white;">
-            <?php foreach (EnumRolePlayer::cases() as $role) { ?>
-                <option value="<?= $role->value ?> ">
-                    <?= $role->name ?>
-                </option>
-            <?php } ?>
-        </select>
-
 
         <div class="full">
             <div class="actions">
