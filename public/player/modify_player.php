@@ -13,7 +13,6 @@ use App\Controller\ControllerPlayer;
 
 $requeteRead = new ControllerPlayer();
 $player = $requeteRead->read($id);
-$player = Player::arrayToPlayer($player);
 $errors = new Error();
 $data = new Form($_POST, $errors);
 

@@ -94,4 +94,9 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
             return false;
         }
     }
+
+    public function delete(InterfaceModel|PlayerHasTeam $playerHasTeam): void
+    {
+        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE ")
+    }
 }

@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div class="player-info">
                     <h3 class="player-name" style="padding-bottom: 15px;"><?= $team->GetTeamName() ?></h3>
                     <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_team.php?id=<?= $team->getId() ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_team.php?id=<?= $team->getId() ?>">Supprimer</a></button>
+                        <button class="btn btn-edit"><a href="modify_team.php?id=<?= $team->getId() ?>">Modifier</a></button>
+                        <button class="btn btn-delete"><a href="delete_team.php?id=<?= $team->getId() ?>">Supprimer</a></button>
                     </div>
                 </div>
             </div>

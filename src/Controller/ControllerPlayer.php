@@ -20,6 +20,11 @@ class ControllerPlayer extends LoginDatabase implements InterfaceCrud, Interface
         $requete->bindValue(':picture', $player->getPicture());
     }
 
+    public function redirection(): void
+    {
+        header("Location: add_player.php");
+    }
+
     public function readAll(): array
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
