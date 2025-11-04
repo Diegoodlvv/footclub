@@ -17,8 +17,7 @@ $requete = new ControllerStaff();
 
 $requete2 = new ControllerStaff();
 $staff_member = $requete2->read($id);
-$staff_member['role'] = EnumRoleStaff::from($staff_member['role']);
-$staff_member = Staff::arrayToStaff($staff_member);
+
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 

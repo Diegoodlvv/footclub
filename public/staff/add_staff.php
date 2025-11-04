@@ -60,13 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <div class="players-container">
         <?php foreach ($staff_members as $staff_member) { ?>
             <div class="player-card">
-                <img src="../../img/<?php echo $staff_member['picture'] ?>" alt="Photo du joueur" class="player-photo">
+                <img src="../../img/<?php echo $staff_member->getPicture() ?>" alt="Photo du joueur" class="player-photo">
                 <div class="player-info">
-                    <h3 class="player-name"><?= $staff_member['firstname'] . ' ' . $staff_member['lastname'] ?></h3>
-                    <p class="player-birthdate">Rôle du staff : <?= $staff_member['role'] ?></p>
+                    <h3 class="player-name"><?= $staff_member->getFirstName() . ' ' . $staff_member->getLastName() ?></h3>
+                    <p class="player-birthdate">Rôle du staff : <?= $staff_member->getRole()->name ?></p>
                     <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_staff.php?id=<?= $staff_member['id'] ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_staff.php?id=<?= $staff_member['id'] ?>">Supprimer</a></button>
+                        <button class="btn-edit"><a href="modify_staff.php?id=<?= $staff_member->getId() ?>">Modifier</a></button>
+                        <button class="btn-delete"><a href="delete_staff.php?id=<?= $staff_member->getId() ?>">Supprimer</a></button>
                     </div>
                 </div>
             </div>

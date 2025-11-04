@@ -77,6 +77,13 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
-        return $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($rows as $row) {
+            $staff_members[] = Staff::arrayToStaff($row);
+        }
+
+        return $staff_members;
     }
 }

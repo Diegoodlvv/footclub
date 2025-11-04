@@ -66,11 +66,12 @@ final class Staff
 
     public static function arrayToStaff(array $data): Staff
     {
+        $role = EnumRoleStaff::from($data['role']);
         $staff_member = new Staff(
             $data['firstname'],
             $data['lastname'],
             $data['picture'],
-            $data['role'],
+            $role,
             $data['id']
         );
 
