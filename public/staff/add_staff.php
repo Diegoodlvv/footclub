@@ -57,21 +57,34 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     <h2>Liste des membres du staff</h2>
 
-    <div class="players-container">
-        <?php foreach ($staff_members as $staff_member) { ?>
-            <div class="player-card">
-                <img src="../../img/<?php echo $staff_member->getPicture() ?>" alt="Photo du joueur" class="player-photo">
-                <div class="player-info">
-                    <h3 class="player-name"><?= $staff_member->getFirstName() . ' ' . $staff_member->getLastName() ?></h3>
-                    <p class="player-birthdate">Rôle du staff : <?= $staff_member->getRole()->name ?></p>
-                    <div class="player-actions">
-                        <button class="btn-edit"><a href="modify_staff.php?id=<?= $staff_member->getId() ?>">Modifier</a></button>
-                        <button class="btn-delete"><a href="delete_staff.php?id=<?= $staff_member->getId() ?>">Supprimer</a></button>
+    <?php if (!empty($staff_members)) { ?>
+        <div class="players-container">
+            <?php foreach ($staff_members as $staff_member) { ?>
+                <div class="player-card">
+                    <img src="../../img/<?= htmlspecialchars($staff_member->getPicture()) ?>" alt="Photo du joueur" class="player-photo">
+                    <div class="player-info">
+                        <h3 class="player-name">
+                            <?= htmlspecialchars($staff_member->getFirstName() . ' ' . $staff_member->getLastName()) ?>
+                        </h3>
+                        <p class="player-birthdate">
+                            Rôle du staff : <?= htmlspecialchars($staff_member->getRole()->name) ?>
+                        </p>
+                        <div class="player-actions">
+                            <button class="btn-edit">
+                                <a href="modify_staff.php?id=<?= (int)$staff_member->getId() ?>">Modifier</a>
+                            </button>
+                            <button class="btn-delete">
+                                <a href="delete_staff.php?id=<?= (int)$staff_member->getId() ?>">Supprimer</a>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        <?php } ?>
-    </div>
+            <?php } ?>
+        </div>
+    <?php } else { ?>
+        <p>Aucun membre du staff n'a été renseigné.</p>
+    <?php } ?>
+
 
     <h2 style="margin-top: 120px;">Ajouter un nouveau membre au staff</h2>
 

@@ -24,16 +24,24 @@ class ControllerPlayer extends LoginDatabase implements InterfaceCrud, Interface
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
-        $players = $requete->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($rows as $row) {
+            $players[] = Player::arrayToPlayer($row);
+        }
+
         return $players;
     }
 
-    public function read($id): array
+    public function read($id): InterfaceModel|Player
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");
         $requete->bindParam(':id', $id);
         $requete->execute();
         $player = $requete->fetch(\PDO::FETCH_ASSOC);
+
+        $player = Player::arrayToPlayer($player);
+
         return $player;
     }
 
@@ -60,10 +68,10 @@ class ControllerPlayer extends LoginDatabase implements InterfaceCrud, Interface
         }
     }
 
-    public function delete($id): void
+    public function delete(InterfaceModel|Player $player): void
     {
         $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE id = :id");
-        $requete->bindValue(':id', $id);
+        $requete->bindValue(':id', $player->getId());
         $requete->execute();
     }
 

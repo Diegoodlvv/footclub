@@ -71,7 +71,8 @@ final class Player
             $dataPlayer["firstname"],
             $dataPlayer["lastname"],
             $dataPlayer["birthdate"],
-            $dataPlayer["picture"]
+            $dataPlayer["picture"],
+            $dataPlayer['id']
         );
     }
 }

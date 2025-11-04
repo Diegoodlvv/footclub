@@ -34,6 +34,11 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         }
     }
 
+    public function redirection(): void
+    {
+        header("Location : add_staff.php");
+    }
+
     public function add(InterfaceModel|Staff $staff_member): int
     {
         $requete = $this->getPdo()->prepare('INSERT INTO ' . self::TABLE . ' (id, firstname, lastname, picture, role) VALUES (0, :firstname, :lastname, :picture, :role)');
@@ -73,7 +78,7 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         return $staff_member;
     }
 
-    public function readAll(): array
+    public function readAll(): ?array
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
@@ -84,6 +89,10 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
             $staff_members[] = Staff::arrayToStaff($row);
         }
 
-        return $staff_members;
+        if (!empty($staff_members)) {
+            return $staff_members;
+        } else {
+            return null;
+        }
     }
 }

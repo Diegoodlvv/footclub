@@ -40,6 +40,7 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
 
         return $teams;
     }
+
     public function read($id): InterfaceModel|Team
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");

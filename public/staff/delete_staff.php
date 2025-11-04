@@ -2,12 +2,14 @@
 
 require_once '../../include/head2.php';
 
-use App\RequetesStaff;
+use App\Controller\ControllerStaff;
 
 $id = $_GET['id'];
+$requete = new ControllerStaff();
+$staff_member = $requete->read($id);
 
-$requete = new RequetesStaff();
+$requete2 = new ControllerStaff();
+$requete2->delete($staff_member);
 
-$requete->delete($id);
-header('Location: add_staff.php');
-echo 'Le joueur a bien été supprimé';
+$requete3 = new ControllerStaff();
+$requete3->redirection();

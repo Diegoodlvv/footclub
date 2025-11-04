@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum EnumRoleStaff: string
 {
-    case Entaineur = "entraineur";
+    case Entraineur = "entraineur";
     case Preparateur = "préparateur";
     case Medecin = "médecin";
 }
