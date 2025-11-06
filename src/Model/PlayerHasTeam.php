@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Enum\EnumRolePlayer;
+use App\Controller\ControllerPlayer;
+use App\Controller\ControllerTeam;
 
 class PlayerHasTeam
 {
@@ -43,5 +45,16 @@ class PlayerHasTeam
         $this->role = $newRole;
     }
 
-    public static 
+    public static function arrayToPlayerHasTeam(array $dataPlayerTeam): PlayerHasTeam
+    {
+        $player = new ControllerPlayer()->read($dataPlayerTeam['player_id']);
+        $team = new ControllerTeam()->read($dataPlayerTeam['team_id']);
+        $role = EnumRolePlayer::from($dataPlayerTeam['role']);
+
+        return new PlayerHasTeam(
+            $team,
+            $player,
+            $role
+        );
+    }
 }

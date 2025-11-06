@@ -11,8 +11,7 @@ $key = [
 ];
 
 $playerHasTeam = new ControllerPlayerHasTeam()->read($key);
-var_dump($playerHasTeam);
 
 $deleting = new ControllerPlayerHasTeam()->delete($playerHasTeam);
 
-// ControllerPlayerHasTeam::redirection();
+ControllerPlayerHasTeam::redirection();

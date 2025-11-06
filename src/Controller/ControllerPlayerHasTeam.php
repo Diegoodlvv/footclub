@@ -14,7 +14,7 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 {
     const TABLE = "player_has_team";
 
-    public function read(int|array $id): array
+    public function read(int|array $id): PlayerHasTeam
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . ' WHERE player_id = :player_id AND team_id = :team_id');
         $requete->bindValue(':player_id', $id['player_id']);
@@ -22,7 +22,7 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
         $requete->execute();
         $playerTeam = $requete->fetch(\PDO::FETCH_ASSOC);
 
-
+        $playerTeam = PlayerHasTeam::arrayToPlayerHasTeam($playerTeam);
 
         return $playerTeam;
     }
@@ -106,6 +106,9 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 
     public function delete(InterfaceModel|PlayerHasTeam $playerHasTeam): void
     {
-        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE ");
+        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE player_id = :player_id AND team_id = :team_id");
+        $requete->bindValue(':player_id', $playerHasTeam->getPlayer()->getId());
+        $requete->bindValue(':team_id', $playerHasTeam->getTeam()->getId());
+        $requete->execute();
     }
 }

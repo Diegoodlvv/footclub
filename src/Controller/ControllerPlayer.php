@@ -67,8 +67,10 @@ class ControllerPlayer extends LoginDatabase implements InterfaceCrud, Interface
         $isPlayer = $requete->fetch(\PDO::FETCH_ASSOC);
 
         if ($isPlayer == true) {
+
             return true;
         } else {
+
             return false;
         }
     }
