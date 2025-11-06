@@ -12,12 +12,15 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
 {
     protected const TABLE = 'opposing_club';
 
-    public function read($id): array
+    public function read(int|array $id): InterfaceModel|OpposingClub
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . ' WHERE id = :id');
         $requete->bindValue(':id', $id);
         $requete->execute();
         $opposingClub = $requete->fetch(\PDO::FETCH_ASSOC);
+
+        $opposingClub = OpposingClub::arrayToClub($opposingClub);
+
         return $opposingClub;
     }
 
@@ -28,10 +31,9 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
 
         $clubs = [];
+
         foreach ($rows as $row) {
-            $clubs[] = [
-                new OpposingClub($row['name'], $row['address'], $row['city'])
-            ];
+            $clubs[] = OpposingClub::arrayToClub($row);
         }
 
         return $clubs;

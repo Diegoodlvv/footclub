@@ -66,7 +66,7 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->bindValue(':lastname', $newStaffData['lastname']);
     }
 
-    public function read($id): InterfaceModel|Staff
+    public function read(int|array $id): InterfaceModel|Staff
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM  ' . self::TABLE . ' WHERE id = :id');
         $requete->bindValue(':id', $id);

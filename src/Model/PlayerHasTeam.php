@@ -42,4 +42,6 @@ class PlayerHasTeam
     {
         $this->role = $newRole;
     }
+
+    public static 
 }

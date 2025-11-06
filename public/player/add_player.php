@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                 <li class="player-team-item">
                                     <span class="team-name"><?= ($playerHasTeam->getTeam()->getTeamName()) ?></span>
                                     <span class="team-role">— <?= ($playerHasTeam->getRole()->name) ?></span>
-                                    <a href="delete_player_team.php?playerId=<?= $playerHasTeam->getPlayer()->getId() ?>,teamId=<?= $playerHasTeam->getTeam()->getId() ?>">
+                                    <a href="delete_player_team.php?playerId=<?= $playerHasTeam->getPlayer()->getId() ?>&teamId=<?= $playerHasTeam->getTeam()->getId() ?>">
                                         <button type="submit" class="btn btn-delete-small">✕</button>
                                     </a>
                                 </li>

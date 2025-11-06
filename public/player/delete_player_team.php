@@ -3,16 +3,16 @@
 require_once '../../include/head2.php';
 
 use App\Controller\ControllerPlayerHasTeam;
+use App\Model\PlayerHasTeam;
 
-$idPlayer = $_GET['playerId'];
-$teamId = $_GET['teamId'];
+$key = [
+    'player_id' => $_GET['playerId'],
+    'team_id' => $_GET['teamId']
+];
 
+$playerHasTeam = new ControllerPlayerHasTeam()->read($key);
+var_dump($playerHasTeam);
 
-$requete = new ControllerPlayerHasTeam();
-$player = $requete->read($id);
+$deleting = new ControllerPlayerHasTeam()->delete($playerHasTeam);
 
-$requete2 = new ControllerPlayerHasTeam();
-$requete2->delete($player);
-
-$requete3 = new ControllerPlayerHasTeam();
-$requete3->redirection();
+// ControllerPlayerHasTeam::redirection();

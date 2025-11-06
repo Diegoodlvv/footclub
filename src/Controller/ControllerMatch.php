@@ -10,7 +10,7 @@ use App\Model\Matchs;
 use App\Model\OpposingClub;
 use App\Model\Team;
 
-class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceRead
+class ControllerMatch extends LoginDatabase implements InterfaceRead
 {
     const TABLE = "matchs";
 
@@ -26,12 +26,15 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->bindValue(':opposing_club_id', $idClub);
     }
 
-    public function read($id): array
+    public function read(int|array $id): InterfaceModel|Matchs
     {
         $requete = $this->getPdo()->prepare("SELECT * FROM " . self::TABLE .  " WHERE id = :id");
         $requete->bindParam(":id",  $id);
         $requete->execute();
         $match = $requete->fetch(\PDO::FETCH_ASSOC);
+
+        $match = Matchs::arrayToMatch($match);
+
         return $match;
     }
 
@@ -39,7 +42,13 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM `' . self::TABLE . '`');
         $requete->execute();
-        $matchs = $requete->fetchAll(\PDO::FETCH_ASSOC);
+        $rows = $requete->fetchAll(\PDO::FETCH_ASSOC);
+
+        $matchs = [];
+        foreach ($rows as $row) {
+            $matchs[] = Matchs::arrayToMatch($row);
+        }
+
         return $matchs;
     }
 
@@ -63,23 +72,9 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
 
     public static function redirection(): void
     {
-        header("Location: add_staff.php");
+        header("Location: add_match.php");
     }
 
-    public function modify(InterfaceModel|Matchs $match, array $newDataMatch): void
-    {
-        // $city = $match->getCity();
-        // $date = $match->getDate();
-        // $opponent_score = $match->getOpponentScore();
-        // $team_score = $match->getTeamScore();
-
-        // $match->setCity($newDataMatch['city']);
-        // $match->setDate($newDataMatch['date']);
-        // $match->setOpponentScore($newDataMatch['opponent_score']);
-        // $match->setTeamScore($newDataMatch['team_score']);
-
-        // $requete = $this->getPdo()->prepare('UPDATE ' . self::TABLE . ' SET ')
-    }
 
     public function getTeamId(Team $team): int
     {

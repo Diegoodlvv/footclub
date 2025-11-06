@@ -38,7 +38,7 @@ class ControllerPlayer extends LoginDatabase implements InterfaceCrud, Interface
         return $players;
     }
 
-    public function read($id): InterfaceModel|Player
+    public function read(int|array $id): InterfaceModel|Player
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . " WHERE :id = id");
         $requete->bindParam(':id', $id);

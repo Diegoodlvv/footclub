@@ -14,12 +14,16 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 {
     const TABLE = "player_has_team";
 
-    public function read($id): array
+    public function read(int|array $id): array
     {
-        $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . ' WHERE id = :id');
-        $requete->bindValue(':id', $id);
+        $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE . ' WHERE player_id = :player_id AND team_id = :team_id');
+        $requete->bindValue(':player_id', $id['player_id']);
+        $requete->bindValue(':team_id', $id['team_id']);
         $requete->execute();
         $playerTeam = $requete->fetch(\PDO::FETCH_ASSOC);
+
+
+
         return $playerTeam;
     }
 

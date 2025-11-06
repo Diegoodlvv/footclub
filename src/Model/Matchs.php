@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Model\Team;
+use App\Controller\ControllerTeam;
+use App\Controller\ControllerOpposingClub;
 
 final class Matchs
 {
@@ -92,5 +94,20 @@ final class Matchs
     public function setOpposingClub(OpposingClub $opposing_club): void
     {
         $this->opposing_club = $opposing_club;
+    }
+
+    public static function arrayToMatch(array $dataMatch): Matchs
+    {
+        $team = new ControllerTeam()->read($dataMatch['team_id']);
+        $club = new ControllerOpposingClub()->read($dataMatch['opposing_club_id']);
+
+        return new Matchs(
+            $dataMatch['team_score'],
+            $dataMatch['opponent_score'],
+            $dataMatch['date'],
+            $team,
+            $dataMatch['city'],
+            $club
+        );
     }
 }

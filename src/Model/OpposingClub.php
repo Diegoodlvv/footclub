@@ -53,4 +53,14 @@ final class OpposingClub
     {
         $this->city = $city;
     }
+
+    public static function arrayToClub(array $dataClub): OpposingClub
+    {
+        return new OpposingClub(
+            $dataClub['name'],
+            $dataClub['address'],
+            $dataClub['city'],
+            $dataClub['id']
+        );
+    }
 }

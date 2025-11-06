@@ -13,8 +13,7 @@ $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
 $requete = new ControllerOpposingClub();
 
-$requete2 = new ControllerOpposingClub();
-$opposing_clubs = $requete2->readAll();
+$opposing_clubs = new ControllerOpposingClub()->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -73,12 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 <div class="player-card">
 
                     <div class="player-info">
-                        <h3 class="player-name" style="padding-bottom: 10px;"><?= $opposing_club['object']->getName() ?></h3>
-                        <p class="player-birthdate">Adresse : <?= $opposing_club['object']->getAdress() ?></p>
-                        <p class="player-birthdate">Ville : <?= $opposing_club['object']->getCity() ?></p>
+                        <h3 class="player-name" style="padding-bottom: 10px;"><?= $opposing_club->getName() ?></h3>
+                        <p class="player-birthdate">Adresse : <?= $opposing_club->getAdress() ?></p>
+                        <p class="player-birthdate">Ville : <?= $opposing_club->getCity() ?></p>
                         <div class="player-actions">
-                            <button class="btn-edit"><a href="modify_opposing_club.php?id=<?= $opposing_club['id'] ?>">Modifier</a></button>
-                            <button class="btn-delete"><a href="delete_opposing_club.php?id=<?= $opposing_club['id'] ?>">Supprimer</a></button>
+                            <button class="btn-edit"><a href="modify_opposing_club.php?id=<?= $opposing_club->getId() ?>">Modifier</a></button>
+                            <button class="btn-delete"><a href="delete_opposing_club.php?id=<?= $opposing_club->getId() ?>">Supprimer</a></button>
                         </div>
                     </div>
                 </div>
