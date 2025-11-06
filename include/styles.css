@@ -293,28 +293,26 @@ footer {
 
 .success-message {
     background-color: #e6f9ee;
-    /* vert clair */
     border-left: 5px solid #28a745;
-    /* vert accent */
     color: #155724;
     padding: 12px 20px;
     border-radius: 6px;
     font-family: Arial, sans-serif;
     margin: 10px 0;
     animation: fadeIn 0.3s ease-in-out;
+    width: fit-content;
 }
 
 .error-message {
     background-color: #fdecea;
-    /* rouge clair */
     border-left: 5px solid #dc3545;
-    /* rouge accent */
     color: #721c24;
     padding: 12px 20px;
     border-radius: 6px;
     font-family: Arial, sans-serif;
     margin: 10px 30px 0 0;
     animation: fadeIn 0.3s ease-in-out;
+    width: fit-content;
 }
 
 .flex {

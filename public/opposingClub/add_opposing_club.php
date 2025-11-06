@@ -7,6 +7,7 @@ use App\Model\Form;
 use App\Model\OpposingClub;
 use App\Controller\ControllerOpposingClub;
 use App\Model\Message;
+use App\Model\Session;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -31,11 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $requeteVerif = new ControllerOpposingClub();
         if ($requeteVerif->verifyOpposingClub($opposing_club)) {
             $requete->add($opposing_club);
-            $_SESSION['message_club'] = "true";
+
+            Session::setMessage('club', true);
         } else {
-            $_SESSION['message_club'] = 'false';
+
+            Session::setMessage('club', false);
         }
-        header("Location: add_opposing_club.php");
+
+        ControllerOpposingClub::redirection();
         exit;
     }
 }
@@ -45,16 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="container">
 
-    <?php if (isset($_SESSION['message_club']) && $_SESSION['message_club'] == 'true') { ?>
-        <div class="success-message">
-            <?php Message::msgSuccesClub() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_club']) && $_SESSION['message_club']  == 'false') { ?>
-        <div class="error-message">
-            <?php Message::msgErrorClub() ?>
-        </div>
+    <?php if (Session::hasMessage('club') && Session::getMessageType('club')) { ?>
+
+        <?php Message::msgSuccesClub() ?>
+
+    <?php } else if (Session::hasMessage('club') && Session::getMessageType('club') == 'false') { ?>
+
+        <?php Message::msgErrorClub() ?>
+
     <?php } ?>
-    <?php unset($_SESSION['message_club']) ?>
+
+    <?php Session::clearMessage('club'); ?>
 
     <h2>Liste des équipes adverses</h2>
 

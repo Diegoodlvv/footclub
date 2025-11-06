@@ -7,6 +7,7 @@ use App\Model\Staff;
 use App\Controller\ControllerStaff;
 use App\Enum\EnumRoleStaff;
 use App\Model\Message;
+use App\Model\Session;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -31,12 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $staff_member = new Staff($dataArray['firstname'], $dataArray['lastname'], $dataArray['picture'], $role);
         $requeteStaff = new ControllerStaff();
         if ($requeteStaff->verifyExistanceStaff($staff_member)) {
-            $_SESSION['message_staff'] = 'false';
+
+            Session::setMessage('staff', false);
         } else {
             $requete->add($staff_member);
-            $_SESSION['message_staff'] = 'true';
+            Session::setMessage('staff', true);
         }
-        header('Location: add_staff.php');
+
+        ControllerStaff::redirection();
+        exit;
     }
 }
 ?>
@@ -44,16 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <link rel="stylesheet" href="../../include/styles.css">
 
 <div class="container">
-    <?php if (isset($_SESSION['message_staff']) && $_SESSION['message_staff'] == 'true') { ?>
-        <div class="success-message">
-            <?php Message::msgSuccesStaff() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_staff']) && $_SESSION['message_staff']  == 'false') { ?>
-        <div class="error-message">
-            <?php Message::msgErrorStaff() ?>
-        </div>
+
+    <?php if (Session::hasMessage('staff') && Session::getMessageType('staff')) { ?>
+
+        <?php Message::msgSuccesStaff() ?>
+
+    <?php } else if (Session::hasMessage('staff') && Session::getMessageType('staff') == 'false') { ?>
+
+        <?php Message::msgErrorStaff() ?>
+
     <?php } ?>
-    <?php unset($_SESSION['message_staff']) ?>
+
+    <?php Session::clearMessage('staff'); ?>
 
     <h2>Liste des membres du staff</h2>
 

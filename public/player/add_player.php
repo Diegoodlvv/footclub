@@ -11,6 +11,7 @@ use App\Enum\EnumRolePlayer;
 use App\Controller\ControllerPlayerHasTeam;
 use App\Model\Message;
 use App\Model\PlayerHasTeam;
+use App\Model\Session;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -24,7 +25,7 @@ $teams = $requeteTeams->readAll();
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    // 🟩 Formulaire d'ajout d'un joueur dans une équipe
+    //  Formulaire d'ajout d'un joueur dans une équipe
     if (isset($_POST['Role']) && isset($_POST['Team']) && isset($_POST['player_id'])) {
         $data->isEmpty('Role');
         $data->isEmpty('Team');
@@ -49,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     $controllerPHT = new ControllerPlayerHasTeam();
                     $controllerPHT->add($playerHasTeam);
 
-                    $_SESSION['message_playerTeam'] = 'true';
+                    Session::setMessage('playerTeam', true);
                 } else {
 
-                    $_SESSION['message_playerTeam'] = 'false';
+                    Session::setMessage('playerTeam', false);
                 }
             } else {
                 echo "L'équipe ou le joueur n'éxiste pas";
@@ -85,13 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             $controllerPlayer = new ControllerPlayer();
             if ($controllerPlayer->verifExistancePlayer($player)) {
-                $_SESSION['message_player'] = 'false';
+                Session::setMessage('player', true);
             } else {
                 $controllerPlayer->add($player);
-                $_SESSION['message_player'] = 'true';
+                Session::setMessage('player', false);
             }
 
-            header("Location: add_player.php");
+            ControllerPlayer::redirection();
             exit;
         }
     }
@@ -102,24 +103,24 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="container">
 
-    <?php if (isset($_SESSION['message_player']) && $_SESSION['message_player'] == 'true') { ?>
-        <div class="success-message">
-            <?php Message::msgSuccesPlayer() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_player']) && $_SESSION['message_player']  == 'false') { ?>
-        <div class="error-message">
-            <?php Message::msgErrorPlayer() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_playerTeam']) && $_SESSION['message_playerTeam'] == 'false') { ?>
-        <div class="error-message">
-            <?php Message::msgErrorPlayerTeam() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_playerTeam']) && $_SESSION['message_playerTeam'] == 'true') { ?>
-        <div class="success-message">
-            <?php Message::msgSuccesPlayerTeam() ?>
-        </div>
+    <?php if (Session::hasMessage('player') && Session::getMessageType('player')) { ?>
+
+        <?php Message::msgSuccesPlayer() ?>
+
+    <?php } else if (Session::hasMessage('player') && Session::getMessageType('player') == 'false') { ?>
+
+        <?php Message::msgErrorPlayer() ?>
+
+    <?php } else if (Session::hasMessage('playerTeam') && Session::getMessageType('playerTeam') == 'false') { ?>
+
+        <?php Message::msgErrorPlayerTeam() ?>
+
+    <?php } else if (Session::hasMessage('playerTeam') && Session::getMessageType('playerTeam')) { ?>
+
+        <?php Message::msgSuccesPlayerTeam() ?>
+
     <?php }
-    unset($_SESSION['message_player'], $_SESSION['message_playerTeam']) ?>
+    Session::clearMessage('player') . Session::clearMessage('playerTeam'); ?>
 
     <h2>Liste des joueurs</h2>
 

@@ -31,6 +31,11 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
         return $playersTeam;
     }
 
+    public static function redirection(): void
+    {
+        header("Location: add_player.php");
+    }
+
     public function bindValuePlayerHasTeam($requete, InterfaceModel|PlayerHasTeam $playerHasTeam)
     {
         $requete->bindValue(':player_id', $playerHasTeam->getPlayer()->getId());
@@ -97,6 +102,6 @@ class ControllerPlayerHasTeam extends LoginDatabase implements InterfaceRead
 
     public function delete(InterfaceModel|PlayerHasTeam $playerHasTeam): void
     {
-        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE ")
+        $requete = $this->getPdo()->prepare("DELETE FROM " . self::TABLE . " WHERE ");
     }
 }

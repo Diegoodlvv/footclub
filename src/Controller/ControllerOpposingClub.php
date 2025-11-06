@@ -21,7 +21,7 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         return $opposingClub;
     }
 
-    public function readAll(): array|false
+    public function readAll(): array
     {
         $requete = $this->getPdo()->prepare('SELECT * FROM ' . self::TABLE);
         $requete->execute();
@@ -30,12 +30,16 @@ class ControllerOpposingClub extends LoginDatabase implements InterfaceCrud, Int
         $clubs = [];
         foreach ($rows as $row) {
             $clubs[] = [
-                'id' => $row['id'],
-                'object' => new OpposingClub($row['name'], $row['address'], $row['city'])
+                new OpposingClub($row['name'], $row['address'], $row['city'])
             ];
         }
 
         return $clubs;
+    }
+
+    public static function redirection(): void
+    {
+        header("Location: add_opposing_club.php");
     }
 
     public function verifyOpposingClub(OpposingClub $opposing_club): bool

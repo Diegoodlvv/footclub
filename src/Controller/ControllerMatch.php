@@ -61,6 +61,11 @@ class ControllerMatch extends LoginDatabase implements InterfaceCrud, InterfaceR
         $requete->execute();
     }
 
+    public static function redirection(): void
+    {
+        header("Location: add_staff.php");
+    }
+
     public function modify(InterfaceModel|Matchs $match, array $newDataMatch): void
     {
         // $city = $match->getCity();

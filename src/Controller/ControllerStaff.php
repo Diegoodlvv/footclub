@@ -34,7 +34,7 @@ class ControllerStaff extends LoginDatabase implements InterfaceCrud, InterfaceR
         }
     }
 
-    public function redirection(): void
+    public static function redirection(): void
     {
         header("Location : add_staff.php");
     }

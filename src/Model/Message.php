@@ -4,64 +4,69 @@ namespace App\Model;
 
 class Message
 {
+    private static function render(string $type, string $text): void
+    {
+        $class = $type === 'success' ? 'success-message' : 'error-message';
+        echo "<div class='{$class}'>{$text}</div>";
+    }
 
     public static function msgSuccesTeam(): void
     {
-        echo "✅ L'équipe a été ajoutée avec succès !";
+        self::render('success', "✅ L'équipe a été ajoutée avec succès !");
     }
 
     public static function msgErrorTeam(): void
     {
-        echo "❌ L'équipe existe déjà dans la base de données.";
+        self::render('error', "❌ L'équipe existe déjà dans la base de données.");
     }
 
     public static function msgSuccesPlayer(): void
     {
-        echo "✅ Le joueur a été ajoutée avec succès !";
+        self::render('success', "✅ Le joueur a été ajouté avec succès !");
     }
 
     public static function msgErrorPlayer(): void
     {
-        echo "❌ Le joueur existe déjà dans la base de données.";
+        self::render('error', "❌ Le joueur existe déjà dans la base de données.");
     }
 
     public static function msgSuccesStaff(): void
     {
-        echo "✅ Le membre du staff a été ajoutée avec succès !";
+        self::render('success', "✅ Le membre du staff a été ajouté avec succès !");
     }
 
     public static function msgErrorStaff(): void
     {
-        echo "❌ Le membre du staff existe déjà dans la base de données.";
+        self::render('error', "❌ Le membre du staff existe déjà dans la base de données.");
     }
 
     public static function msgSuccesClub(): void
     {
-        echo "✅ L'équipe adverse a été ajoutée avec succès !";
+        self::render('success', "✅ L'équipe adverse a été ajoutée avec succès !");
     }
 
     public static function msgErrorClub(): void
     {
-        echo "❌ L'équipe adverse existe déjà dans la base de données.";
+        self::render('error', "❌ L'équipe adverse existe déjà dans la base de données.");
     }
 
     public static function msgSuccesMatch(): void
     {
-        echo "✅ Le match a été ajoutée avec succès !";
+        self::render('success', "✅ Le match a été ajouté avec succès !");
     }
 
     public static function msgErrorMatch(): void
     {
-        echo "❌ Le match existe déjà dans la base de données.";
-    }
-
-    public static function msgErrorPlayerTeam(): void
-    {
-        echo "❌ Le joueur à déjà ce rôle dans cette équipe";
+        self::render('error', "❌ Le match existe déjà dans la base de données.");
     }
 
     public static function msgSuccesPlayerTeam(): void
     {
-        echo "✅ Le joueur a été ajoutée avec succès dans l'équipe choisi !";
+        self::render('success', "✅ Le joueur a été ajouté avec succès dans l'équipe choisie !");
+    }
+
+    public static function msgErrorPlayerTeam(): void
+    {
+        self::render('error', "❌ Le joueur a déjà ce rôle dans cette équipe.");
     }
 }

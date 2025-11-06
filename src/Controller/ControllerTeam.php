@@ -23,7 +23,7 @@ class ControllerTeam extends LoginDatabase implements InterfaceCrud, InterfaceRe
         return $idTeam;
     }
 
-    public function redirection(): void
+    public static function redirection(): void
     {
         header("Location: add_team.php");
     }

@@ -7,6 +7,7 @@ use App\Model\Form;
 use App\Model\Team;
 use App\Controller\ControllerTeam;
 use App\Model\Message;
+use App\Model\Session;
 
 $errors = new Error();
 $data = new Form($_POST ?? [], $errors);
@@ -30,15 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $requeteVerif = new ControllerTeam();
 
         if ($requeteVerif->verifExistanceTeam($team)) {
-            $_SESSION['message_team'] = 'false';
+
+            Session::setMessage('team', false);
         } else {
 
             $requete->add($team);
-
-            $_SESSION['message_team'] = 'true';
+            Session::setMessage('team', true);
         }
-        header("Location: add_team.php");
 
+        ControllerTeam::redirection();
         exit;
     }
 }
@@ -50,16 +51,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <div class="container">
 
-    <?php if (isset($_SESSION['message_team']) && $_SESSION['message_team'] == 'true') { ?>
-        <div class="success-message">
-            <?php Message::msgSuccesTeam() ?>
-        </div>
-    <?php } else if (isset($_SESSION['message_team']) && $_SESSION['message_team']  == 'false') { ?>
-        <div class="error-message">
-            <?php Message::msgErrorTeam() ?>
-        </div>
+    <?php if (Session::hasMessage('team') && Session::getMessageType('team')) { ?>
+
+        <?php Message::msgSuccesTeam() ?>
+
+    <?php } else if (Session::hasMessage('team') && Session::getMessageType('team') == 'false') { ?>
+
+        <?php Message::msgErrorTeam() ?>
+
     <?php } ?>
-    <?php unset($_SESSION['message_team']) ?>
+
+    <?php Session::clearMessage('team'); ?>
 
     <h2>Liste des équipes</h2>
 
