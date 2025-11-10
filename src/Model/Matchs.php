@@ -107,7 +107,8 @@ final class Matchs
             $dataMatch['date'],
             $team,
             $dataMatch['city'],
-            $club
+            $club,
+            $dataMatch['id']
         );
     }
 }

@@ -63,10 +63,10 @@ class ControllerMatch extends LoginDatabase implements InterfaceRead
         return $this->getPdo()->lastInsertId();
     }
 
-    public function delete($id): void
+    public function delete(Matchs $match): void
     {
         $requete = $this->getPdo()->prepare('DELETE FROM ' . self::TABLE . ' WHERE id = :id');
-        $requete->bindValue(':id', $id);
+        $requete->bindValue(':id', $match->getId());
         $requete->execute();
     }
 

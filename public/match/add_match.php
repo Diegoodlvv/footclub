@@ -85,6 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <p class="player-birthdate">Date du match : <?= $match->getDate() ?></p>
                     <p class="player-birthdate">Score du match : <?= $match->getTeamScore() . '-' . $match->getOpponentScore() ?></p>
                     <p class="player-birthdate">Lieu du match : <?= $match->getCity() . ' , ' . $match->getOpposing_club()->getAdress() ?></p>
+                    <a href="delete_match.php?id=<?= $match->getId() ?>">
+                        <button type="submit" class="btn btn-delete-small">Supprimer</button>
+                    </a>
                 </div>
             </div>
         <?php } ?>
